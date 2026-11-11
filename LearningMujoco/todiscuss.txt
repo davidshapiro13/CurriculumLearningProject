@@ -1,0 +1,9 @@
+How many frames per second? Like is every frame a step?
+
+with our 10 joints:
+
+Each hip: 3
+Each knee: 1
+Each ankle: 2
+Each shoulder: 3
+Each elbow: 1

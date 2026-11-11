@@ -1,0 +1,126 @@
+<mujoco model="humanoid_20_angles">
+    <compiler angle="degree" inertiafromgeom="true" />
+    <default>
+        <joint armature="1" damping="1" limited="true" />
+        <geom conaffinity="1" condim="1" contype="1" margin="0.001" material="geom" rgba="0.8 0.6 .4 1" />
+    </default>
+    <option integrator="RK4" iterations="50" solver="PGS" timestep="0.003">
+        <!-- <flags solverstat="enable" energy="enable"/>-->
+    </option>
+    <size nkey="5" nuser_geom="1" />
+    <visual>
+        <map fogend="5" fogstart="3" />
+    </visual>
+    <asset>
+        <texture builtin="gradient" height="100" rgb1=".4 .5 .6" rgb2="0 0 0" type="skybox" width="100" />
+        <!-- <texture builtin="gradient" height="100" rgb1="1 1 1" rgb2="0 0 0" type="skybox" width="100"/>-->
+        <texture builtin="flat" height="1278" mark="cross" markrgb="1 1 1" name="texgeom" random="0.01" rgb1="0.8 0.6 0.4" rgb2="0.8 0.6 0.4" type="cube" width="127" />
+        <texture builtin="checker" height="100" name="texplane" rgb1="0 0 0" rgb2="0.8 0.8 0.8" type="2d" width="100" />
+        <material name="MatPlane" reflectance="0.5" shininess="1" specular="1" texrepeat="60 60" texture="texplane" />
+        <material name="geom" texture="texgeom" texuniform="true" />
+    </asset>
+    <worldbody>
+        <light cutoff="100" diffuse="1 1 1" dir="-0 0 -1.3" directional="true" exponent="1" pos="0 0 1.3" specular=".1 .1 .1" />
+        <geom condim="3" friction="1 .1 .1" material="MatPlane" name="floor" pos="0 0 0" rgba="0.8 0.9 0.8 1" size="20 20 0.125" type="plane" />
+        <!-- <geom condim="3" material="MatPlane" name="floor" pos="0 0 0" size="10 10 0.125" type="plane"/>-->
+        <body name="torso" pos="0 0 1.4">
+            <camera name="track" mode="trackcom" pos="0 -4 0" xyaxes="1 0 0 0 0 1" />
+            <joint armature="0" damping="0" limited="false" name="root" pos="0 0 0" stiffness="0" type="free" />
+            <geom fromto="0 -.07 0 0 .07 0" name="torso1" size="0.07" type="capsule" />
+            <geom name="head" pos="0 0 .19" size=".09" type="sphere" user="258" />
+            <geom fromto="-.01 -.06 -.12 -.01 .06 -.12" name="uwaist" size="0.06" type="capsule" />
+            <body name="lwaist" pos="-.01 0 -0.260" quat="1.000 0 -0.002 0">
+                <geom fromto="0 -.06 0 0 .06 0" name="lwaist" size="0.06" type="capsule" />
+                <body name="pelvis" pos="0 0 -0.165" quat="1.000 0 -0.002 0">
+                    <geom fromto="-.02 -.07 0 -.02 .07 0" name="butt" size="0.09" type="capsule" />
+                    <body name="right_thigh" pos="0 -0.1 -0.04">
+                        <joint armature="0.01" axis="1 0 0" damping="5" name="right_hip_x" pos="0 0 0" range="-25 5" stiffness="10" type="hinge" />
+                        <joint armature="0.01" axis="0 0 1" damping="5" name="right_hip_z" pos="0 0 0" range="-60 35" stiffness="10" type="hinge" />
+                        <joint armature="0.0080" axis="0 1 0" damping="5" name="right_hip_y" pos="0 0 0" range="-110 20" stiffness="20" type="hinge" />
+                        <geom fromto="0 0 0 0 0.01 -.34" name="right_thigh1" size="0.06" type="capsule" />
+                        <body name="right_shin" pos="0 0.01 -0.403">
+                            <joint armature="0.0060" axis="0 -1 0" name="right_knee" pos="0 0 .02" range="-160 -2" type="hinge" />
+                            <geom fromto="0 0 0 0 0 -.3" name="right_shin1" size="0.049" type="capsule" />
+                            <body name="right_foot" pos="0 0 -0.3">
+                                <geom name="right_foot" type="box" pos="0.04 0 -0.05" size="0.12 0.055 0.04" condim="3" friction="1 0.1 0.1" />
+                                <joint name="right_ankle_y" type="hinge" axis="0 1 0" range="-45 30" damping="3" armature="0.01" />
+                                <joint name="right_ankle_x" type="hinge" axis="1 0 0" range="-20 20" damping="3" armature="0.01" />
+                            </body>
+                        </body>
+                    </body>
+                    <body name="left_thigh" pos="0 0.1 -0.04">
+                        <joint armature="0.01" axis="-1 0 0" damping="5" name="left_hip_x" pos="0 0 0" range="-25 5" stiffness="10" type="hinge" />
+                        <joint armature="0.01" axis="0 0 -1" damping="5" name="left_hip_z" pos="0 0 0" range="-60 35" stiffness="10" type="hinge" />
+                        <joint armature="0.01" axis="0 1 0" damping="5" name="left_hip_y" pos="0 0 0" range="-110 20" stiffness="20" type="hinge" />
+                        <geom fromto="0 0 0 0 -0.01 -.34" name="left_thigh1" size="0.06" type="capsule" />
+                        <body name="left_shin" pos="0 -0.01 -0.403">
+                            <joint armature="0.0060" axis="0 -1 0" name="left_knee" pos="0 0 .02" range="-160 -2" stiffness="1" type="hinge" />
+                            <geom fromto="0 0 0 0 0 -.3" name="left_shin1" size="0.049" type="capsule" />
+                            <body name="left_foot" pos="0 0 -0.3">
+                                <geom name="left_foot" type="box" pos="0.04 0 -0.05" size="0.12 0.055 0.04" condim="3" friction="1 0.1 0.1" />
+                                <joint name="left_ankle_y" type="hinge" axis="0 1 0" range="-45 30" damping="3" armature="0.01" />
+                                <joint name="left_ankle_x" type="hinge" axis="1 0 0" range="-20 20" damping="3" armature="0.01" />
+                            </body>
+                        </body>
+                    </body>
+                </body>
+            </body>
+            <body name="right_upper_arm" pos="0 -0.17 0.06">
+                <joint armature="0.0068" axis="2 1 1" name="right_shoulder1" pos="0 0 0" range="-85 60" stiffness="1" type="hinge" />
+                <joint armature="0.0051" axis="0 -1 1" name="right_shoulder2" pos="0 0 0" range="-85 60" stiffness="1" type="hinge" />
+                <joint name="right_shoulder3" type="hinge" axis="1 -1 -1" range="-60 60" damping="2" armature="0.006" stiffness="0" />
+                <geom fromto="0 0 0 .16 -.16 -.16" name="right_uarm1" size="0.04 0.16" type="capsule" />
+                <body name="right_lower_arm" pos=".18 -.18 -.18">
+                    <joint armature="0.0028" axis="0 -1 1" name="right_elbow" pos="0 0 0" range="-90 50" stiffness="0" type="hinge" />
+                    <geom fromto="0.01 0.01 0.01 .17 .17 .17" name="right_larm" size="0.031" type="capsule" />
+                    <geom name="right_hand" pos=".18 .18 .18" size="0.04" type="sphere" />
+                    <camera pos="0 0 0" />
+                </body>
+            </body>
+            <body name="left_upper_arm" pos="0 0.17 0.06">
+                <joint armature="0.0068" axis="2 -1 1" name="left_shoulder1" pos="0 0 0" range="-60 85" stiffness="1" type="hinge" />
+                <joint armature="0.0051" axis="0 1 1" name="left_shoulder2" pos="0 0 0" range="-60 85" stiffness="1" type="hinge" />
+                <joint name="left_shoulder3" type="hinge" axis="1 1 -1" range="-60 60" damping="2" armature="0.006" stiffness="0" />
+                <geom fromto="0 0 0 .16 .16 -.16" name="left_uarm1" size="0.04 0.16" type="capsule" />
+                <body name="left_lower_arm" pos=".18 .18 -.18">
+                    <joint armature="0.0028" axis="0 -1 -1" name="left_elbow" pos="0 0 0" range="-90 50" stiffness="0" type="hinge" />
+                    <geom fromto="0.01 -0.01 0.01 .17 -.17 .17" name="left_larm" size="0.031" type="capsule" />
+                    <geom name="left_hand" pos=".18 -.18 .18" size="0.04" type="sphere" />
+                </body>
+            </body>
+        </body>
+    </worldbody>
+    <tendon>
+        <fixed name="left_hipknee">
+            <joint coef="-1" joint="left_hip_y" />
+            <joint coef="1" joint="left_knee" />
+        </fixed>
+        <fixed name="right_hipknee">
+            <joint coef="-1" joint="right_hip_y" />
+            <joint coef="1" joint="right_knee" />
+        </fixed>
+    </tendon>
+    <actuator>
+        <!-- Controls are absolute target angles in RADIANS, gear=1. Gains are initial values, not a tuned balance controller. -->
+        <position name="right_hip_x" joint="right_hip_x" gear="1" kp="100" kv="10" ctrllimited="true" ctrlrange="-0.4363323130 0.0872664626" forcelimited="true" forcerange="-200 200" />
+        <position name="right_hip_z" joint="right_hip_z" gear="1" kp="100" kv="10" ctrllimited="true" ctrlrange="-1.0471975512 0.6108652382" forcelimited="true" forcerange="-200 200" />
+        <position name="right_hip_y" joint="right_hip_y" gear="1" kp="100" kv="10" ctrllimited="true" ctrlrange="-1.9198621772 0.3490658504" forcelimited="true" forcerange="-200 200" />
+        <position name="right_knee" joint="right_knee" gear="1" kp="100" kv="10" ctrllimited="true" ctrlrange="-2.7925268032 -0.0349065850" forcelimited="true" forcerange="-200 200" />
+        <position name="right_ankle_y" joint="right_ankle_y" gear="1" kp="40" kv="4" ctrllimited="true" ctrlrange="-0.7853981634 0.5235987756" forcelimited="true" forcerange="-60 60" />
+        <position name="right_ankle_x" joint="right_ankle_x" gear="1" kp="40" kv="4" ctrllimited="true" ctrlrange="-0.3490658504 0.3490658504" forcelimited="true" forcerange="-60 60" />
+        <position name="right_shoulder1" joint="right_shoulder1" gear="1" kp="40" kv="4" ctrllimited="true" ctrlrange="-1.4835298642 1.0471975512" forcelimited="true" forcerange="-60 60" />
+        <position name="right_shoulder2" joint="right_shoulder2" gear="1" kp="40" kv="4" ctrllimited="true" ctrlrange="-1.4835298642 1.0471975512" forcelimited="true" forcerange="-60 60" />
+        <position name="right_shoulder3" joint="right_shoulder3" gear="1" kp="40" kv="4" ctrllimited="true" ctrlrange="-1.0471975512 1.0471975512" forcelimited="true" forcerange="-60 60" />
+        <position name="right_elbow" joint="right_elbow" gear="1" kp="40" kv="4" ctrllimited="true" ctrlrange="-1.5707963268 0.8726646260" forcelimited="true" forcerange="-60 60" />
+        <position name="left_hip_x" joint="left_hip_x" gear="1" kp="100" kv="10" ctrllimited="true" ctrlrange="-0.4363323130 0.0872664626" forcelimited="true" forcerange="-200 200" />
+        <position name="left_hip_z" joint="left_hip_z" gear="1" kp="100" kv="10" ctrllimited="true" ctrlrange="-1.0471975512 0.6108652382" forcelimited="true" forcerange="-200 200" />
+        <position name="left_hip_y" joint="left_hip_y" gear="1" kp="100" kv="10" ctrllimited="true" ctrlrange="-1.9198621772 0.3490658504" forcelimited="true" forcerange="-200 200" />
+        <position name="left_knee" joint="left_knee" gear="1" kp="100" kv="10" ctrllimited="true" ctrlrange="-2.7925268032 -0.0349065850" forcelimited="true" forcerange="-200 200" />
+        <position name="left_ankle_y" joint="left_ankle_y" gear="1" kp="40" kv="4" ctrllimited="true" ctrlrange="-0.7853981634 0.5235987756" forcelimited="true" forcerange="-60 60" />
+        <position name="left_ankle_x" joint="left_ankle_x" gear="1" kp="40" kv="4" ctrllimited="true" ctrlrange="-0.3490658504 0.3490658504" forcelimited="true" forcerange="-60 60" />
+        <position name="left_shoulder1" joint="left_shoulder1" gear="1" kp="40" kv="4" ctrllimited="true" ctrlrange="-1.0471975512 1.4835298642" forcelimited="true" forcerange="-60 60" />
+        <position name="left_shoulder2" joint="left_shoulder2" gear="1" kp="40" kv="4" ctrllimited="true" ctrlrange="-1.0471975512 1.4835298642" forcelimited="true" forcerange="-60 60" />
+        <position name="left_shoulder3" joint="left_shoulder3" gear="1" kp="40" kv="4" ctrllimited="true" ctrlrange="-1.0471975512 1.0471975512" forcelimited="true" forcerange="-60 60" />
+        <position name="left_elbow" joint="left_elbow" gear="1" kp="40" kv="4" ctrllimited="true" ctrlrange="-1.5707963268 0.8726646260" forcelimited="true" forcerange="-60 60" />
+    </actuator>
+</mujoco>

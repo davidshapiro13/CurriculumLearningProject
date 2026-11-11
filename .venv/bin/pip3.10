@@ -1,0 +1,9 @@
+#!/bin/sh
+'''exec' "/Users/davidshapiro/Desktop - Duck Duck Goose pro/Grad School/Year 2/Semester 1/Courses/Reinforcement Learning/Final Project/CurriculumLearningProject/.venv/bin/python" "$0" "$@"
+' '''
+import sys
+from pip._internal.cli.main import cli
+if __name__ == '__main__':
+    if sys.argv[0].endswith('.exe'):
+        sys.argv[0] = sys.argv[0][:-4]
+    sys.exit(cli())
