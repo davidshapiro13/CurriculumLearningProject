@@ -1,0 +1,398 @@
+Training original humanoid. Run directory: LearningMujoco/walking_original_run
+31,122/9,000,000 additional steps | 2075 steps/s | ETA 72.0 min | recent episode length 110.6
+62,801/9,000,000 additional steps | 2093 steps/s | ETA 71.2 min | recent episode length 116.8
+94,781/9,000,000 additional steps | 2106 steps/s | ETA 70.5 min | recent episode length 112.8
+Evaluation: {'reward': 747.6156000614399, 'length': 122.6, 'distance': 3.1602410196902495, 'survived': 0.0, 'timesteps': 1100448}
+124,881/9,000,000 additional steps | 2081 steps/s | ETA 71.1 min | recent episode length 124.4
+154,253/9,000,000 additional steps | 2057 steps/s | ETA 71.7 min | recent episode length 124.3
+176,866/9,000,000 additional steps | 1965 steps/s | ETA 74.8 min | recent episode length 127.0
+197,196/9,000,000 additional steps | 1878 steps/s | ETA 78.1 min | recent episode length 130.6
+Evaluation: {'reward': 1017.8578985399481, 'length': 168.4, 'distance': 3.8896308956669623, 'survived': 0.0, 'timesteps': 1200448}
+Saved best policy with matching normalization.
+221,646/9,000,000 additional steps | 1847 steps/s | ETA 79.2 min | recent episode length 119.9
+238,522/9,000,000 additional steps | 1767 steps/s | ETA 82.6 min | recent episode length 117.4
+257,759/9,000,000 additional steps | 1718 steps/s | ETA 84.8 min | recent episode length 121.9
+280,065/9,000,000 additional steps | 1697 steps/s | ETA 85.6 min | recent episode length 133.2
+Evaluation: {'reward': 838.6448330025357, 'length': 134.6, 'distance': 3.7288169681802557, 'survived': 0.0, 'timesteps': 1300448}
+303,707/9,000,000 additional steps | 1687 steps/s | ETA 85.9 min | recent episode length 123.1
+323,379/9,000,000 additional steps | 1658 steps/s | ETA 87.2 min | recent episode length 128.4
+346,808/9,000,000 additional steps | 1651 steps/s | ETA 87.3 min | recent episode length 114.0
+379,894/9,000,000 additional steps | 1688 steps/s | ETA 85.1 min | recent episode length 121.8
+Evaluation: {'reward': 896.2279793053536, 'length': 152.0, 'distance': 3.3381334871126045, 'survived': 0.0, 'timesteps': 1400448}
+402,064/9,000,000 additional steps | 1675 steps/s | ETA 85.5 min | recent episode length 127.9
+422,511/9,000,000 additional steps | 1657 steps/s | ETA 86.3 min | recent episode length 118.3
+441,825/9,000,000 additional steps | 1636 steps/s | ETA 87.2 min | recent episode length 116.5
+464,680/9,000,000 additional steps | 1630 steps/s | ETA 87.3 min | recent episode length 114.3
+479,497/9,000,000 additional steps | 1598 steps/s | ETA 88.9 min | recent episode length 118.4
+493,817/9,000,000 additional steps | 1568 steps/s | ETA 90.4 min | recent episode length 124.6
+Evaluation: {'reward': 875.5010145736954, 'length': 145.2, 'distance': 3.481641800956838, 'survived': 0.0, 'timesteps': 1500448}
+515,073/9,000,000 additional steps | 1561 steps/s | ETA 90.6 min | recent episode length 113.7
+535,045/9,000,000 additional steps | 1551 steps/s | ETA 91.0 min | recent episode length 131.8
+555,496/9,000,000 additional steps | 1543 steps/s | ETA 91.2 min | recent episode length 119.4
+583,681/9,000,000 additional steps | 1556 steps/s | ETA 90.1 min | recent episode length 127.9
+Evaluation: {'reward': 657.475933642346, 'length': 112.0, 'distance': 2.781636397914342, 'survived': 0.0, 'timesteps': 1600448}
+604,863/9,000,000 additional steps | 1551 steps/s | ETA 90.2 min | recent episode length 126.5
+625,709/9,000,000 additional steps | 1545 steps/s | ETA 90.4 min | recent episode length 120.7
+654,455/9,000,000 additional steps | 1558 steps/s | ETA 89.3 min | recent episode length 129.2
+676,036/9,000,000 additional steps | 1554 steps/s | ETA 89.3 min | recent episode length 122.3
+696,795/9,000,000 additional steps | 1548 steps/s | ETA 89.4 min | recent episode length 123.3
+Evaluation: {'reward': 782.0949499813124, 'length': 124.6, 'distance': 3.596669760959999, 'survived': 0.0, 'timesteps': 1700448}
+724,189/9,000,000 additional steps | 1557 steps/s | ETA 88.6 min | recent episode length 124.6
+746,729/9,000,000 additional steps | 1555 steps/s | ETA 88.4 min | recent episode length 124.1
+774,287/9,000,000 additional steps | 1564 steps/s | ETA 87.7 min | recent episode length 124.0
+794,738/9,000,000 additional steps | 1558 steps/s | ETA 87.8 min | recent episode length 131.2
+Evaluation: {'reward': 973.5378862247496, 'length': 156.0, 'distance': 4.296523847818897, 'survived': 0.0, 'timesteps': 1800448}
+814,038/9,000,000 additional steps | 1550 steps/s | ETA 88.0 min | recent episode length 135.3
+842,213/9,000,000 additional steps | 1559 steps/s | ETA 87.2 min | recent episode length 122.8
+864,660/9,000,000 additional steps | 1558 steps/s | ETA 87.0 min | recent episode length 118.3
+893,106/9,000,000 additional steps | 1567 steps/s | ETA 86.2 min | recent episode length 126.4
+Evaluation: {'reward': 898.3611919228226, 'length': 147.8, 'distance': 3.7628345266347885, 'survived': 0.0, 'timesteps': 1900448}
+920,684/9,000,000 additional steps | 1574 steps/s | ETA 85.6 min | recent episode length 124.1
+949,159/9,000,000 additional steps | 1582 steps/s | ETA 84.8 min | recent episode length 120.1
+980,300/9,000,000 additional steps | 1594 steps/s | ETA 83.9 min | recent episode length 124.4
+Evaluation: {'reward': 711.2602908641924, 'length': 119.6, 'distance': 2.8662452079263665, 'survived': 0.0, 'timesteps': 2000448}
+1,009,935/9,000,000 additional steps | 1603 steps/s | ETA 83.1 min | recent episode length 115.8
+1,041,204/9,000,000 additional steps | 1614 steps/s | ETA 82.2 min | recent episode length 120.9
+1,072,664/9,000,000 additional steps | 1625 steps/s | ETA 81.3 min | recent episode length 132.6
+Evaluation: {'reward': 705.3337265681822, 'length': 120.0, 'distance': 2.4655324356429316, 'survived': 0.0, 'timesteps': 2100448}
+1,103,589/9,000,000 additional steps | 1635 steps/s | ETA 80.5 min | recent episode length 123.2
+1,134,833/9,000,000 additional steps | 1645 steps/s | ETA 79.7 min | recent episode length 130.7
+1,166,444/9,000,000 additional steps | 1654 steps/s | ETA 78.9 min | recent episode length 128.5
+1,198,081/9,000,000 additional steps | 1664 steps/s | ETA 78.2 min | recent episode length 123.8
+Evaluation: {'reward': 811.6932505839831, 'length': 141.0, 'distance': 3.145354793151887, 'survived': 0.0, 'timesteps': 2200448}
+1,228,812/9,000,000 additional steps | 1672 steps/s | ETA 77.5 min | recent episode length 124.6
+1,260,143/9,000,000 additional steps | 1680 steps/s | ETA 76.8 min | recent episode length 132.2
+1,291,708/9,000,000 additional steps | 1688 steps/s | ETA 76.1 min | recent episode length 136.1
+Evaluation: {'reward': 870.1663480630438, 'length': 156.2, 'distance': 2.8814550583585814, 'survived': 0.0, 'timesteps': 2300448}
+1,322,724/9,000,000 additional steps | 1696 steps/s | ETA 75.5 min | recent episode length 123.2
+1,354,334/9,000,000 additional steps | 1703 steps/s | ETA 74.8 min | recent episode length 126.4
+1,386,033/9,000,000 additional steps | 1711 steps/s | ETA 74.2 min | recent episode length 128.1
+Evaluation: {'reward': 910.5280501280109, 'length': 152.0, 'distance': 3.725597547975601, 'survived': 0.0, 'timesteps': 2400448}
+1,417,140/9,000,000 additional steps | 1718 steps/s | ETA 73.6 min | recent episode length 139.8
+1,448,642/9,000,000 additional steps | 1724 steps/s | ETA 73.0 min | recent episode length 134.3
+1,480,470/9,000,000 additional steps | 1731 steps/s | ETA 72.4 min | recent episode length 132.2
+Evaluation: {'reward': 639.4945151153644, 'length': 110.6, 'distance': 3.1280258314181126, 'survived': 0.0, 'timesteps': 2500448}
+1,511,942/9,000,000 additional steps | 1738 steps/s | ETA 71.8 min | recent episode length 128.7
+1,542,688/9,000,000 additional steps | 1743 steps/s | ETA 71.3 min | recent episode length 119.2
+1,571,841/9,000,000 additional steps | 1746 steps/s | ETA 70.9 min | recent episode length 119.0
+Evaluation: {'reward': 771.3162116785932, 'length': 128.4, 'distance': 3.1980354249687974, 'survived': 0.0, 'timesteps': 2600448}
+1,600,260/9,000,000 additional steps | 1749 steps/s | ETA 70.5 min | recent episode length 129.3
+1,630,527/9,000,000 additional steps | 1753 steps/s | ETA 70.1 min | recent episode length 132.7
+1,661,113/9,000,000 additional steps | 1758 steps/s | ETA 69.6 min | recent episode length 129.3
+1,692,349/9,000,000 additional steps | 1763 steps/s | ETA 69.1 min | recent episode length 131.9
+Evaluation: {'reward': 837.4714455452025, 'length': 148.2, 'distance': 3.1983684180093523, 'survived': 0.0, 'timesteps': 2700448}
+1,722,156/9,000,000 additional steps | 1766 steps/s | ETA 68.7 min | recent episode length 129.6
+1,753,387/9,000,000 additional steps | 1771 steps/s | ETA 68.2 min | recent episode length 131.8
+1,781,659/9,000,000 additional steps | 1773 steps/s | ETA 67.9 min | recent episode length 118.6
+Evaluation: {'reward': 747.7903294800321, 'length': 119.6, 'distance': 3.4017923002490265, 'survived': 0.0, 'timesteps': 2800448}
+1,809,117/9,000,000 additional steps | 1773 steps/s | ETA 67.6 min | recent episode length 117.5
+1,841,153/9,000,000 additional steps | 1779 steps/s | ETA 67.1 min | recent episode length 122.1
+1,873,203/9,000,000 additional steps | 1784 steps/s | ETA 66.6 min | recent episode length 122.9
+Evaluation: {'reward': 744.2678057098532, 'length': 117.8, 'distance': 3.518964269989131, 'survived': 0.0, 'timesteps': 2900448}
+1,904,846/9,000,000 additional steps | 1788 steps/s | ETA 66.1 min | recent episode length 116.9
+1,936,870/9,000,000 additional steps | 1793 steps/s | ETA 65.6 min | recent episode length 120.0
+1,968,641/9,000,000 additional steps | 1798 steps/s | ETA 65.2 min | recent episode length 135.9
+Evaluation: {'reward': 935.5454174422212, 'length': 158.2, 'distance': 4.020116391270401, 'survived': 0.0, 'timesteps': 3000448}
+2,000,001/9,000,000 additional steps | 1801 steps/s | ETA 64.8 min | recent episode length 139.1
+2,031,648/9,000,000 additional steps | 1805 steps/s | ETA 64.3 min | recent episode length 119.8
+2,063,394/9,000,000 additional steps | 1809 steps/s | ETA 63.9 min | recent episode length 129.6
+2,094,964/9,000,000 additional steps | 1813 steps/s | ETA 63.5 min | recent episode length 139.0
+Evaluation: {'reward': 947.1587063432675, 'length': 156.6, 'distance': 3.9111524144130825, 'survived': 0.0, 'timesteps': 3100448}
+2,126,015/9,000,000 additional steps | 1817 steps/s | ETA 63.1 min | recent episode length 125.8
+2,157,922/9,000,000 additional steps | 1820 steps/s | ETA 62.6 min | recent episode length 121.7
+2,189,591/9,000,000 additional steps | 1824 steps/s | ETA 62.2 min | recent episode length 127.3
+Evaluation: {'reward': 857.9782532451975, 'length': 132.6, 'distance': 3.957374952757452, 'survived': 0.0, 'timesteps': 3200448}
+2,220,865/9,000,000 additional steps | 1827 steps/s | ETA 61.8 min | recent episode length 121.7
+2,252,942/9,000,000 additional steps | 1831 steps/s | ETA 61.4 min | recent episode length 122.8
+2,285,091/9,000,000 additional steps | 1835 steps/s | ETA 61.0 min | recent episode length 115.6
+Evaluation: {'reward': 850.6302356885881, 'length': 135.8, 'distance': 3.8891728604949956, 'survived': 0.0, 'timesteps': 3300448}
+2,316,664/9,000,000 additional steps | 1838 steps/s | ETA 60.6 min | recent episode length 129.3
+2,348,631/9,000,000 additional steps | 1842 steps/s | ETA 60.2 min | recent episode length 129.5
+2,380,507/9,000,000 additional steps | 1845 steps/s | ETA 59.8 min | recent episode length 126.3
+Evaluation: {'reward': 773.6870488519611, 'length': 126.0, 'distance': 3.556869918889645, 'survived': 0.0, 'timesteps': 3400448}
+2,411,884/9,000,000 additional steps | 1848 steps/s | ETA 59.4 min | recent episode length 125.2
+2,443,882/9,000,000 additional steps | 1851 steps/s | ETA 59.0 min | recent episode length 125.1
+2,472,383/9,000,000 additional steps | 1851 steps/s | ETA 58.8 min | recent episode length 130.4
+Evaluation: {'reward': 880.3481641798962, 'length': 139.4, 'distance': 3.93237503611743, 'survived': 0.0, 'timesteps': 3500448}
+2,502,710/9,000,000 additional steps | 1853 steps/s | ETA 58.4 min | recent episode length 132.8
+2,534,161/9,000,000 additional steps | 1856 steps/s | ETA 58.1 min | recent episode length 134.9
+2,565,401/9,000,000 additional steps | 1858 steps/s | ETA 57.7 min | recent episode length 124.8
+2,596,141/9,000,000 additional steps | 1861 steps/s | ETA 57.4 min | recent episode length 129.2
+Evaluation: {'reward': 885.0007591333342, 'length': 145.0, 'distance': 3.7696210846679863, 'survived': 0.0, 'timesteps': 3600448}
+2,626,515/9,000,000 additional steps | 1862 steps/s | ETA 57.0 min | recent episode length 117.3
+2,657,410/9,000,000 additional steps | 1864 steps/s | ETA 56.7 min | recent episode length 115.5
+2,686,676/9,000,000 additional steps | 1865 steps/s | ETA 56.4 min | recent episode length 118.0
+Evaluation: {'reward': 836.6426557938843, 'length': 133.0, 'distance': 3.7886055766614097, 'survived': 0.0, 'timesteps': 3700448}
+2,716,254/9,000,000 additional steps | 1866 steps/s | ETA 56.1 min | recent episode length 118.6
+2,746,474/9,000,000 additional steps | 1868 steps/s | ETA 55.8 min | recent episode length 124.0
+2,775,858/9,000,000 additional steps | 1869 steps/s | ETA 55.5 min | recent episode length 123.7
+Evaluation: {'reward': 763.2549227453167, 'length': 125.4, 'distance': 3.4667533881305252, 'survived': 0.0, 'timesteps': 3800448}
+2,804,735/9,000,000 additional steps | 1869 steps/s | ETA 55.2 min | recent episode length 119.6
+2,834,008/9,000,000 additional steps | 1870 steps/s | ETA 55.0 min | recent episode length 124.5
+2,863,460/9,000,000 additional steps | 1871 steps/s | ETA 54.7 min | recent episode length 128.0
+2,893,086/9,000,000 additional steps | 1872 steps/s | ETA 54.4 min | recent episode length 135.7
+Evaluation: {'reward': 805.6861225282395, 'length': 128.4, 'distance': 3.7702070883404772, 'survived': 0.0, 'timesteps': 3900448}
+2,922,060/9,000,000 additional steps | 1873 steps/s | ETA 54.1 min | recent episode length 129.1
+2,951,764/9,000,000 additional steps | 1874 steps/s | ETA 53.8 min | recent episode length 126.2
+2,981,360/9,000,000 additional steps | 1875 steps/s | ETA 53.5 min | recent episode length 128.7
+Evaluation: {'reward': 964.720260582646, 'length': 150.6, 'distance': 4.217824430000772, 'survived': 0.0, 'timesteps': 4000448}
+3,010,906/9,000,000 additional steps | 1876 steps/s | ETA 53.2 min | recent episode length 126.6
+3,042,817/9,000,000 additional steps | 1878 steps/s | ETA 52.9 min | recent episode length 133.0
+3,073,944/9,000,000 additional steps | 1880 steps/s | ETA 52.5 min | recent episode length 128.5
+Evaluation: {'reward': 836.2273364666471, 'length': 135.0, 'distance': 3.6535715568782074, 'survived': 0.0, 'timesteps': 4100448}
+3,105,012/9,000,000 additional steps | 1881 steps/s | ETA 52.2 min | recent episode length 129.6
+3,136,959/9,000,000 additional steps | 1884 steps/s | ETA 51.9 min | recent episode length 128.5
+3,168,639/9,000,000 additional steps | 1886 steps/s | ETA 51.5 min | recent episode length 124.1
+Evaluation: {'reward': 995.6503153887119, 'length': 148.6, 'distance': 4.870561142378783, 'survived': 0.0, 'timesteps': 4200448}
+3,200,001/9,000,000 additional steps | 1887 steps/s | ETA 51.2 min | recent episode length 131.8
+3,231,478/9,000,000 additional steps | 1889 steps/s | ETA 50.9 min | recent episode length 122.8
+3,262,322/9,000,000 additional steps | 1891 steps/s | ETA 50.6 min | recent episode length 127.3
+3,293,266/9,000,000 additional steps | 1892 steps/s | ETA 50.3 min | recent episode length 125.8
+Evaluation: {'reward': 881.8971970272967, 'length': 135.6, 'distance': 4.2819718120425465, 'survived': 0.0, 'timesteps': 4300448}
+3,322,991/9,000,000 additional steps | 1893 steps/s | ETA 50.0 min | recent episode length 130.3
+3,354,401/9,000,000 additional steps | 1895 steps/s | ETA 49.7 min | recent episode length 136.6
+3,384,326/9,000,000 additional steps | 1895 steps/s | ETA 49.4 min | recent episode length 140.0
+Evaluation: {'reward': 894.4989237478255, 'length': 145.8, 'distance': 3.7713550782332463, 'survived': 0.0, 'timesteps': 4400448}
+3,414,341/9,000,000 additional steps | 1896 steps/s | ETA 49.1 min | recent episode length 138.9
+3,446,267/9,000,000 additional steps | 1898 steps/s | ETA 48.8 min | recent episode length 123.5
+3,478,160/9,000,000 additional steps | 1900 steps/s | ETA 48.4 min | recent episode length 127.1
+Evaluation: {'reward': 1056.1888280495978, 'length': 162.2, 'distance': 5.073386868843431, 'survived': 0.0, 'timesteps': 4500448}
+Saved best policy with matching normalization.
+3,509,519/9,000,000 additional steps | 1902 steps/s | ETA 48.1 min | recent episode length 135.4
+3,540,832/9,000,000 additional steps | 1903 steps/s | ETA 47.8 min | recent episode length 121.6
+3,572,064/9,000,000 additional steps | 1905 steps/s | ETA 47.5 min | recent episode length 127.9
+Evaluation: {'reward': 719.7609402464425, 'length': 113.8, 'distance': 3.4459756392670604, 'survived': 0.0, 'timesteps': 4600448}
+3,601,566/9,000,000 additional steps | 1905 steps/s | ETA 47.2 min | recent episode length 124.4
+3,631,028/9,000,000 additional steps | 1906 steps/s | ETA 47.0 min | recent episode length 125.7
+3,661,682/9,000,000 additional steps | 1907 steps/s | ETA 46.7 min | recent episode length 137.1
+3,691,196/9,000,000 additional steps | 1907 steps/s | ETA 46.4 min | recent episode length 130.4
+Evaluation: {'reward': 993.0457434120383, 'length': 148.4, 'distance': 4.908171518482673, 'survived': 0.0, 'timesteps': 4700448}
+3,721,009/9,000,000 additional steps | 1908 steps/s | ETA 46.1 min | recent episode length 134.3
+3,751,627/9,000,000 additional steps | 1909 steps/s | ETA 45.8 min | recent episode length 134.5
+3,783,139/9,000,000 additional steps | 1910 steps/s | ETA 45.5 min | recent episode length 139.0
+Evaluation: {'reward': 958.2578217164776, 'length': 151.0, 'distance': 4.306804921057401, 'survived': 0.0, 'timesteps': 4800448}
+3,814,054/9,000,000 additional steps | 1911 steps/s | ETA 45.2 min | recent episode length 137.4
+3,845,857/9,000,000 additional steps | 1913 steps/s | ETA 44.9 min | recent episode length 136.7
+3,877,660/9,000,000 additional steps | 1914 steps/s | ETA 44.6 min | recent episode length 143.0
+Evaluation: {'reward': 956.4070420525386, 'length': 158.6, 'distance': 3.847971884484108, 'survived': 0.0, 'timesteps': 4900448}
+3,906,288/9,000,000 additional steps | 1914 steps/s | ETA 44.3 min | recent episode length 143.2
+3,937,617/9,000,000 additional steps | 1916 steps/s | ETA 44.0 min | recent episode length 143.8
+3,968,332/9,000,000 additional steps | 1917 steps/s | ETA 43.8 min | recent episode length 144.8
+Evaluation: {'reward': 842.6222449265067, 'length': 138.2, 'distance': 3.5911118455086295, 'survived': 0.0, 'timesteps': 5000448}
+4,000,001/9,000,000 additional steps | 1918 steps/s | ETA 43.5 min | recent episode length 133.5
+4,031,750/9,000,000 additional steps | 1919 steps/s | ETA 43.1 min | recent episode length 140.0
+4,063,745/9,000,000 additional steps | 1921 steps/s | ETA 42.8 min | recent episode length 134.7
+4,095,884/9,000,000 additional steps | 1922 steps/s | ETA 42.5 min | recent episode length 130.6
+Evaluation: {'reward': 861.4818994688987, 'length': 136.0, 'distance': 4.136320429114912, 'survived': 0.0, 'timesteps': 5100448}
+4,127,612/9,000,000 additional steps | 1924 steps/s | ETA 42.2 min | recent episode length 124.7
+4,159,782/9,000,000 additional steps | 1925 steps/s | ETA 41.9 min | recent episode length 129.0
+4,190,406/9,000,000 additional steps | 1926 steps/s | ETA 41.6 min | recent episode length 135.1
+Evaluation: {'reward': 928.942783780637, 'length': 141.6, 'distance': 4.184641409884945, 'survived': 0.0, 'timesteps': 5200448}
+4,220,319/9,000,000 additional steps | 1926 steps/s | ETA 41.4 min | recent episode length 135.3
+4,251,649/9,000,000 additional steps | 1927 steps/s | ETA 41.1 min | recent episode length 124.5
+4,283,784/9,000,000 additional steps | 1929 steps/s | ETA 40.7 min | recent episode length 136.1
+Evaluation: {'reward': 943.6091551109175, 'length': 155.4, 'distance': 4.275919122420365, 'survived': 0.0, 'timesteps': 5300448}
+4,315,450/9,000,000 additional steps | 1930 steps/s | ETA 40.5 min | recent episode length 122.8
+4,347,650/9,000,000 additional steps | 1932 steps/s | ETA 40.1 min | recent episode length 133.0
+4,379,717/9,000,000 additional steps | 1933 steps/s | ETA 39.8 min | recent episode length 131.6
+Evaluation: {'reward': 845.5876226199896, 'length': 140.0, 'distance': 3.8451062513678176, 'survived': 0.0, 'timesteps': 5400448}
+4,411,217/9,000,000 additional steps | 1934 steps/s | ETA 39.5 min | recent episode length 117.8
+4,443,640/9,000,000 additional steps | 1936 steps/s | ETA 39.2 min | recent episode length 126.5
+4,475,927/9,000,000 additional steps | 1937 steps/s | ETA 38.9 min | recent episode length 129.4
+Evaluation: {'reward': 872.1364745247644, 'length': 132.2, 'distance': 4.281706339073937, 'survived': 0.0, 'timesteps': 5500448}
+4,507,801/9,000,000 additional steps | 1938 steps/s | ETA 38.6 min | recent episode length 121.0
+4,540,266/9,000,000 additional steps | 1940 steps/s | ETA 38.3 min | recent episode length 129.0
+4,572,541/9,000,000 additional steps | 1941 steps/s | ETA 38.0 min | recent episode length 133.2
+Evaluation: {'reward': 901.9885943989875, 'length': 143.2, 'distance': 4.221568640065523, 'survived': 0.0, 'timesteps': 5600448}
+4,604,271/9,000,000 additional steps | 1942 steps/s | ETA 37.7 min | recent episode length 133.2
+4,636,769/9,000,000 additional steps | 1943 steps/s | ETA 37.4 min | recent episode length 138.9
+4,669,428/9,000,000 additional steps | 1945 steps/s | ETA 37.1 min | recent episode length 128.9
+Evaluation: {'reward': 958.5675117513792, 'length': 143.6, 'distance': 4.866049198228419, 'survived': 0.0, 'timesteps': 5700448}
+4,701,517/9,000,000 additional steps | 1946 steps/s | ETA 36.8 min | recent episode length 131.4
+4,734,120/9,000,000 additional steps | 1948 steps/s | ETA 36.5 min | recent episode length 132.7
+4,763,734/9,000,000 additional steps | 1948 steps/s | ETA 36.2 min | recent episode length 126.2
+4,793,168/9,000,000 additional steps | 1948 steps/s | ETA 36.0 min | recent episode length 148.9
+Evaluation: {'reward': 961.141322410346, 'length': 148.4, 'distance': 4.595750642399787, 'survived': 0.0, 'timesteps': 5800448}
+4,823,553/9,000,000 additional steps | 1948 steps/s | ETA 35.7 min | recent episode length 143.7
+4,855,277/9,000,000 additional steps | 1949 steps/s | ETA 35.4 min | recent episode length 145.4
+4,886,380/9,000,000 additional steps | 1950 steps/s | ETA 35.2 min | recent episode length 131.9
+Evaluation: {'reward': 966.5146380866961, 'length': 159.2, 'distance': 4.239683546567406, 'survived': 0.0, 'timesteps': 5900448}
+4,917,356/9,000,000 additional steps | 1951 steps/s | ETA 34.9 min | recent episode length 146.5
+4,947,795/9,000,000 additional steps | 1951 steps/s | ETA 34.6 min | recent episode length 135.0
+4,979,026/9,000,000 additional steps | 1952 steps/s | ETA 34.3 min | recent episode length 128.8
+Evaluation: {'reward': 754.4932776640302, 'length': 114.8, 'distance': 3.9888567011590625, 'survived': 0.0, 'timesteps': 6000448}
+5,009,905/9,000,000 additional steps | 1953 steps/s | ETA 34.1 min | recent episode length 114.2
+5,040,391/9,000,000 additional steps | 1953 steps/s | ETA 33.8 min | recent episode length 135.6
+5,071,361/9,000,000 additional steps | 1954 steps/s | ETA 33.5 min | recent episode length 139.6
+Evaluation: {'reward': 823.7285582539098, 'length': 127.8, 'distance': 3.8265057270600296, 'survived': 0.0, 'timesteps': 6100448}
+5,102,237/9,000,000 additional steps | 1954 steps/s | ETA 33.2 min | recent episode length 132.0
+5,131,371/9,000,000 additional steps | 1954 steps/s | ETA 33.0 min | recent episode length 139.6
+5,162,453/9,000,000 additional steps | 1955 steps/s | ETA 32.7 min | recent episode length 136.5
+5,193,912/9,000,000 additional steps | 1956 steps/s | ETA 32.4 min | recent episode length 135.4
+Evaluation: {'reward': 815.7110249146164, 'length': 130.6, 'distance': 3.593838642920582, 'survived': 0.0, 'timesteps': 6200448}
+5,223,822/9,000,000 additional steps | 1956 steps/s | ETA 32.2 min | recent episode length 134.7
+5,252,444/9,000,000 additional steps | 1956 steps/s | ETA 31.9 min | recent episode length 120.3
+5,283,772/9,000,000 additional steps | 1956 steps/s | ETA 31.7 min | recent episode length 136.8
+Evaluation: {'reward': 840.8032875836192, 'length': 146.0, 'distance': 3.6367075234688238, 'survived': 0.0, 'timesteps': 6300448}
+5,315,825/9,000,000 additional steps | 1957 steps/s | ETA 31.4 min | recent episode length 130.5
+5,346,975/9,000,000 additional steps | 1958 steps/s | ETA 31.1 min | recent episode length 145.7
+5,376,171/9,000,000 additional steps | 1958 steps/s | ETA 30.8 min | recent episode length 127.1
+Evaluation: {'reward': 738.7123707023799, 'length': 118.0, 'distance': 3.7653399073414406, 'survived': 0.0, 'timesteps': 6400448}
+5,408,045/9,000,000 additional steps | 1959 steps/s | ETA 30.6 min | recent episode length 118.9
+5,440,283/9,000,000 additional steps | 1960 steps/s | ETA 30.3 min | recent episode length 125.7
+5,469,718/9,000,000 additional steps | 1960 steps/s | ETA 30.0 min | recent episode length 141.6
+Evaluation: {'reward': 896.0822558062855, 'length': 134.6, 'distance': 4.439753737798927, 'survived': 0.0, 'timesteps': 6500448}
+5,501,279/9,000,000 additional steps | 1961 steps/s | ETA 29.7 min | recent episode length 151.8
+5,532,489/9,000,000 additional steps | 1961 steps/s | ETA 29.5 min | recent episode length 122.9
+5,563,210/9,000,000 additional steps | 1962 steps/s | ETA 29.2 min | recent episode length 125.8
+5,595,158/9,000,000 additional steps | 1963 steps/s | ETA 28.9 min | recent episode length 143.1
+Evaluation: {'reward': 910.4193488190842, 'length': 140.6, 'distance': 4.3748678146698, 'survived': 0.0, 'timesteps': 6600448}
+5,626,409/9,000,000 additional steps | 1963 steps/s | ETA 28.6 min | recent episode length 133.5
+5,658,935/9,000,000 additional steps | 1964 steps/s | ETA 28.3 min | recent episode length 129.8
+5,690,311/9,000,000 additional steps | 1965 steps/s | ETA 28.1 min | recent episode length 142.3
+Evaluation: {'reward': 1117.591149856053, 'length': 167.8, 'distance': 5.197431636671596, 'survived': 0.0, 'timesteps': 6700448}
+Saved best policy with matching normalization.
+5,721,496/9,000,000 additional steps | 1966 steps/s | ETA 27.8 min | recent episode length 127.8
+5,753,760/9,000,000 additional steps | 1967 steps/s | ETA 27.5 min | recent episode length 121.5
+5,783,743/9,000,000 additional steps | 1967 steps/s | ETA 27.3 min | recent episode length 132.9
+Evaluation: {'reward': 942.3252363318522, 'length': 142.4, 'distance': 4.689804599520877, 'survived': 0.0, 'timesteps': 6800448}
+5,814,014/9,000,000 additional steps | 1967 steps/s | ETA 27.0 min | recent episode length 120.5
+5,842,400/9,000,000 additional steps | 1967 steps/s | ETA 26.8 min | recent episode length 141.1
+5,873,286/9,000,000 additional steps | 1967 steps/s | ETA 26.5 min | recent episode length 126.4
+Evaluation: {'reward': 915.254047198627, 'length': 144.0, 'distance': 4.035114695136789, 'survived': 0.0, 'timesteps': 6900448}
+5,905,041/9,000,000 additional steps | 1968 steps/s | ETA 26.2 min | recent episode length 135.3
+5,935,877/9,000,000 additional steps | 1968 steps/s | ETA 25.9 min | recent episode length 131.1
+5,968,106/9,000,000 additional steps | 1969 steps/s | ETA 25.7 min | recent episode length 145.6
+5,998,635/9,000,000 additional steps | 1969 steps/s | ETA 25.4 min | recent episode length 117.5
+Evaluation: {'reward': 977.7537900313744, 'length': 149.0, 'distance': 4.901503294059183, 'survived': 0.0, 'timesteps': 7000448}
+6,029,475/9,000,000 additional steps | 1970 steps/s | ETA 25.1 min | recent episode length 145.2
+6,060,174/9,000,000 additional steps | 1970 steps/s | ETA 24.9 min | recent episode length 133.6
+6,088,970/9,000,000 additional steps | 1970 steps/s | ETA 24.6 min | recent episode length 143.8
+Evaluation: {'reward': 997.7813174436802, 'length': 153.4, 'distance': 4.616405728015472, 'survived': 0.0, 'timesteps': 7100448}
+6,120,365/9,000,000 additional steps | 1971 steps/s | ETA 24.4 min | recent episode length 141.1
+6,152,675/9,000,000 additional steps | 1971 steps/s | ETA 24.1 min | recent episode length 135.0
+6,183,897/9,000,000 additional steps | 1972 steps/s | ETA 23.8 min | recent episode length 128.8
+Evaluation: {'reward': 1064.2372405791973, 'length': 163.4, 'distance': 4.773695253904003, 'survived': 0.0, 'timesteps': 7200448}
+6,213,189/9,000,000 additional steps | 1972 steps/s | ETA 23.6 min | recent episode length 142.0
+6,242,756/9,000,000 additional steps | 1972 steps/s | ETA 23.3 min | recent episode length 138.6
+6,273,836/9,000,000 additional steps | 1972 steps/s | ETA 23.0 min | recent episode length 144.0
+Evaluation: {'reward': 806.8465078630617, 'length': 129.2, 'distance': 4.0250061106322885, 'survived': 0.0, 'timesteps': 7300448}
+6,305,468/9,000,000 additional steps | 1973 steps/s | ETA 22.8 min | recent episode length 125.7
+6,337,759/9,000,000 additional steps | 1974 steps/s | ETA 22.5 min | recent episode length 142.3
+6,369,680/9,000,000 additional steps | 1975 steps/s | ETA 22.2 min | recent episode length 143.3
+Evaluation: {'reward': 833.179160832409, 'length': 128.4, 'distance': 4.007248227847392, 'survived': 0.0, 'timesteps': 7400448}
+6,401,407/9,000,000 additional steps | 1975 steps/s | ETA 21.9 min | recent episode length 130.9
+6,433,824/9,000,000 additional steps | 1976 steps/s | ETA 21.6 min | recent episode length 141.0
+6,466,038/9,000,000 additional steps | 1977 steps/s | ETA 21.4 min | recent episode length 140.3
+6,495,304/9,000,000 additional steps | 1977 steps/s | ETA 21.1 min | recent episode length 137.3
+Evaluation: {'reward': 857.696494124, 'length': 129.4, 'distance': 4.243823577469249, 'survived': 0.0, 'timesteps': 7500448}
+6,526,835/9,000,000 additional steps | 1977 steps/s | ETA 20.8 min | recent episode length 138.0
+6,559,408/9,000,000 additional steps | 1978 steps/s | ETA 20.6 min | recent episode length 124.7
+6,591,896/9,000,000 additional steps | 1979 steps/s | ETA 20.3 min | recent episode length 131.8
+Evaluation: {'reward': 1017.2912693152881, 'length': 147.8, 'distance': 5.1517303455389944, 'survived': 0.0, 'timesteps': 7600448}
+6,623,769/9,000,000 additional steps | 1980 steps/s | ETA 20.0 min | recent episode length 143.8
+6,656,253/9,000,000 additional steps | 1981 steps/s | ETA 19.7 min | recent episode length 150.5
+6,685,185/9,000,000 additional steps | 1980 steps/s | ETA 19.5 min | recent episode length 145.7
+Evaluation: {'reward': 781.4054326218063, 'length': 123.2, 'distance': 3.8132709100078657, 'survived': 0.0, 'timesteps': 7700448}
+6,714,046/9,000,000 additional steps | 1980 steps/s | ETA 19.2 min | recent episode length 122.0
+6,744,511/9,000,000 additional steps | 1980 steps/s | ETA 19.0 min | recent episode length 129.8
+6,769,663/9,000,000 additional steps | 1979 steps/s | ETA 18.8 min | recent episode length 131.5
+6,797,229/9,000,000 additional steps | 1978 steps/s | ETA 18.6 min | recent episode length 135.5
+Evaluation: {'reward': 1058.2385182341145, 'length': 164.0, 'distance': 4.7787751924090305, 'survived': 0.0, 'timesteps': 7800448}
+6,818,029/9,000,000 additional steps | 1976 steps/s | ETA 18.4 min | recent episode length 149.1
+6,847,744/9,000,000 additional steps | 1976 steps/s | ETA 18.2 min | recent episode length 127.2
+6,876,654/9,000,000 additional steps | 1976 steps/s | ETA 17.9 min | recent episode length 131.4
+Evaluation: {'reward': 775.7794249585218, 'length': 121.4, 'distance': 3.7611003444437734, 'survived': 0.0, 'timesteps': 7900448}
+6,905,345/9,000,000 additional steps | 1975 steps/s | ETA 17.7 min | recent episode length 130.0
+6,936,882/9,000,000 additional steps | 1976 steps/s | ETA 17.4 min | recent episode length 133.8
+6,968,438/9,000,000 additional steps | 1976 steps/s | ETA 17.1 min | recent episode length 138.4
+Evaluation: {'reward': 969.8786732192535, 'length': 148.4, 'distance': 4.636065317554215, 'survived': 0.0, 'timesteps': 8000448}
+7,000,001/9,000,000 additional steps | 1977 steps/s | ETA 16.9 min | recent episode length 137.9
+7,032,228/9,000,000 additional steps | 1978 steps/s | ETA 16.6 min | recent episode length 133.5
+7,064,560/9,000,000 additional steps | 1978 steps/s | ETA 16.3 min | recent episode length 149.9
+7,096,965/9,000,000 additional steps | 1979 steps/s | ETA 16.0 min | recent episode length 137.8
+Evaluation: {'reward': 1024.033396220037, 'length': 151.6, 'distance': 5.170838259854303, 'survived': 0.0, 'timesteps': 8100448}
+7,128,918/9,000,000 additional steps | 1980 steps/s | ETA 15.8 min | recent episode length 136.0
+7,160,374/9,000,000 additional steps | 1980 steps/s | ETA 15.5 min | recent episode length 132.0
+7,190,428/9,000,000 additional steps | 1980 steps/s | ETA 15.2 min | recent episode length 134.7
+Evaluation: {'reward': 901.8652925539424, 'length': 143.8, 'distance': 4.066924058118005, 'survived': 0.0, 'timesteps': 8200448}
+7,220,359/9,000,000 additional steps | 1980 steps/s | ETA 15.0 min | recent episode length 145.5
+7,250,670/9,000,000 additional steps | 1980 steps/s | ETA 14.7 min | recent episode length 138.1
+7,280,970/9,000,000 additional steps | 1981 steps/s | ETA 14.5 min | recent episode length 137.4
+Evaluation: {'reward': 906.5336622480312, 'length': 144.0, 'distance': 4.321690252366533, 'survived': 0.0, 'timesteps': 8300448}
+7,311,096/9,000,000 additional steps | 1981 steps/s | ETA 14.2 min | recent episode length 133.9
+7,340,823/9,000,000 additional steps | 1981 steps/s | ETA 14.0 min | recent episode length 134.3
+7,370,813/9,000,000 additional steps | 1981 steps/s | ETA 13.7 min | recent episode length 139.1
+7,399,279/9,000,000 additional steps | 1980 steps/s | ETA 13.5 min | recent episode length 142.5
+Evaluation: {'reward': 971.1534679676919, 'length': 161.2, 'distance': 4.151257269682137, 'survived': 0.0, 'timesteps': 8400448}
+7,427,163/9,000,000 additional steps | 1980 steps/s | ETA 13.2 min | recent episode length 141.9
+7,457,164/9,000,000 additional steps | 1980 steps/s | ETA 13.0 min | recent episode length 155.1
+7,484,073/9,000,000 additional steps | 1979 steps/s | ETA 12.8 min | recent episode length 153.9
+Evaluation: {'reward': 1145.1444382438083, 'length': 169.2, 'distance': 5.487537945716907, 'survived': 0.0, 'timesteps': 8500448}
+Saved best policy with matching normalization.
+7,512,667/9,000,000 additional steps | 1979 steps/s | ETA 12.5 min | recent episode length 146.0
+7,542,100/9,000,000 additional steps | 1979 steps/s | ETA 12.3 min | recent episode length 155.3
+7,569,002/9,000,000 additional steps | 1978 steps/s | ETA 12.1 min | recent episode length 148.1
+7,597,079/9,000,000 additional steps | 1978 steps/s | ETA 11.8 min | recent episode length 150.0
+Evaluation: {'reward': 1124.4427059183465, 'length': 181.2, 'distance': 4.753250241764432, 'survived': 0.0, 'timesteps': 8600448}
+7,626,360/9,000,000 additional steps | 1978 steps/s | ETA 11.6 min | recent episode length 153.9
+7,656,561/9,000,000 additional steps | 1978 steps/s | ETA 11.3 min | recent episode length 145.7
+7,687,515/9,000,000 additional steps | 1978 steps/s | ETA 11.1 min | recent episode length 151.6
+Evaluation: {'reward': 1071.5025151168836, 'length': 160.6, 'distance': 5.416030899312005, 'survived': 0.0, 'timesteps': 8700448}
+7,716,440/9,000,000 additional steps | 1978 steps/s | ETA 10.8 min | recent episode length 115.0
+7,746,941/9,000,000 additional steps | 1978 steps/s | ETA 10.6 min | recent episode length 132.9
+7,775,210/9,000,000 additional steps | 1978 steps/s | ETA 10.3 min | recent episode length 145.8
+Evaluation: {'reward': 1214.5830373333915, 'length': 170.0, 'distance': 6.466953368235471, 'survived': 0.0, 'timesteps': 8800448}
+Saved best policy with matching normalization.
+7,805,736/9,000,000 additional steps | 1978 steps/s | ETA 10.1 min | recent episode length 136.7
+7,835,000/9,000,000 additional steps | 1978 steps/s | ETA 9.8 min | recent episode length 148.3
+7,862,986/9,000,000 additional steps | 1978 steps/s | ETA 9.6 min | recent episode length 154.9
+7,891,091/9,000,000 additional steps | 1977 steps/s | ETA 9.3 min | recent episode length 149.4
+Evaluation: {'reward': 1192.673995428148, 'length': 180.8, 'distance': 5.460021074682233, 'survived': 0.0, 'timesteps': 8900448}
+7,918,081/9,000,000 additional steps | 1976 steps/s | ETA 9.1 min | recent episode length 156.8
+7,949,601/9,000,000 additional steps | 1977 steps/s | ETA 8.9 min | recent episode length 130.8
+7,982,581/9,000,000 additional steps | 1978 steps/s | ETA 8.6 min | recent episode length 131.3
+Evaluation: {'reward': 973.4549442506556, 'length': 141.2, 'distance': 5.105621609596975, 'survived': 0.0, 'timesteps': 9000448}
+8,014,827/9,000,000 additional steps | 1978 steps/s | ETA 8.3 min | recent episode length 139.5
+8,047,536/9,000,000 additional steps | 1979 steps/s | ETA 8.0 min | recent episode length 133.3
+8,080,222/9,000,000 additional steps | 1980 steps/s | ETA 7.7 min | recent episode length 138.9
+Evaluation: {'reward': 924.8772915119016, 'length': 150.2, 'distance': 4.126564222639046, 'survived': 0.0, 'timesteps': 9100448}
+8,112,499/9,000,000 additional steps | 1981 steps/s | ETA 7.5 min | recent episode length 132.3
+8,145,500/9,000,000 additional steps | 1981 steps/s | ETA 7.2 min | recent episode length 113.7
+8,178,264/9,000,000 additional steps | 1982 steps/s | ETA 6.9 min | recent episode length 117.2
+Evaluation: {'reward': 925.1919765390451, 'length': 132.6, 'distance': 4.48448952306737, 'survived': 0.0, 'timesteps': 9200448}
+8,210,533/9,000,000 additional steps | 1983 steps/s | ETA 6.6 min | recent episode length 126.9
+8,243,377/9,000,000 additional steps | 1983 steps/s | ETA 6.4 min | recent episode length 124.7
+8,275,997/9,000,000 additional steps | 1984 steps/s | ETA 6.1 min | recent episode length 138.5
+Evaluation: {'reward': 727.6279251847402, 'length': 128.8, 'distance': 3.135620753951534, 'survived': 0.0, 'timesteps': 9300448}
+8,307,713/9,000,000 additional steps | 1985 steps/s | ETA 5.8 min | recent episode length 143.8
+8,340,759/9,000,000 additional steps | 1985 steps/s | ETA 5.5 min | recent episode length 127.2
+8,373,745/9,000,000 additional steps | 1986 steps/s | ETA 5.3 min | recent episode length 120.7
+Evaluation: {'reward': 855.1365089637914, 'length': 138.4, 'distance': 4.025628315196792, 'survived': 0.0, 'timesteps': 9400448}
+8,403,387/9,000,000 additional steps | 1986 steps/s | ETA 5.0 min | recent episode length 133.4
+8,433,527/9,000,000 additional steps | 1986 steps/s | ETA 4.8 min | recent episode length 128.3
+8,466,433/9,000,000 additional steps | 1987 steps/s | ETA 4.5 min | recent episode length 136.5
+8,499,272/9,000,000 additional steps | 1988 steps/s | ETA 4.2 min | recent episode length 127.2
+Evaluation: {'reward': 974.197416170569, 'length': 147.8, 'distance': 4.719195626381444, 'survived': 0.0, 'timesteps': 9500448}
+8,531,544/9,000,000 additional steps | 1988 steps/s | ETA 3.9 min | recent episode length 132.5
+8,564,539/9,000,000 additional steps | 1989 steps/s | ETA 3.6 min | recent episode length 122.8
+8,597,652/9,000,000 additional steps | 1990 steps/s | ETA 3.4 min | recent episode length 127.5
+Evaluation: {'reward': 1055.8354594421921, 'length': 153.2, 'distance': 5.366406465678088, 'survived': 0.0, 'timesteps': 9600448}
+8,629,853/9,000,000 additional steps | 1990 steps/s | ETA 3.1 min | recent episode length 135.5
+8,662,712/9,000,000 additional steps | 1991 steps/s | ETA 2.8 min | recent episode length 142.4
+8,695,603/9,000,000 additional steps | 1992 steps/s | ETA 2.5 min | recent episode length 135.0
+Evaluation: {'reward': 848.7089918661079, 'length': 134.8, 'distance': 4.222961369072687, 'survived': 0.0, 'timesteps': 9700448}
+8,727,981/9,000,000 additional steps | 1992 steps/s | ETA 2.3 min | recent episode length 118.3
+8,760,703/9,000,000 additional steps | 1993 steps/s | ETA 2.0 min | recent episode length 129.8
+8,791,955/9,000,000 additional steps | 1993 steps/s | ETA 1.7 min | recent episode length 138.7
+Evaluation: {'reward': 851.0123374878445, 'length': 154.6, 'distance': 3.408341990064263, 'survived': 0.0, 'timesteps': 9800448}
+8,816,523/9,000,000 additional steps | 1992 steps/s | ETA 1.5 min | recent episode length 138.5
+8,847,483/9,000,000 additional steps | 1992 steps/s | ETA 1.3 min | recent episode length 144.7
+8,879,672/9,000,000 additional steps | 1993 steps/s | ETA 1.0 min | recent episode length 119.1
+Evaluation: {'reward': 949.2281267123092, 'length': 157.8, 'distance': 3.8459724055723354, 'survived': 0.0, 'timesteps': 9900448}
+8,909,954/9,000,000 additional steps | 1993 steps/s | ETA 0.8 min | recent episode length 137.7
+8,941,836/9,000,000 additional steps | 1993 steps/s | ETA 0.5 min | recent episode length 131.1
+8,973,906/9,000,000 additional steps | 1994 steps/s | ETA 0.2 min | recent episode length 126.1
+Evaluation: {'reward': 805.4111180770003, 'length': 122.0, 'distance': 4.088401730850972, 'survived': 0.0, 'timesteps': 10000448}
+Evaluation: {'reward': 934.1393620077055, 'length': 134.6, 'distance': 4.897485336045558, 'survived': 0.0, 'timesteps': 10000896}
+Saved training artifacts to LearningMujoco/walking_original_run

@@ -735,3 +735,443 @@ This exports `joint_ranges_free.mp4`. Expect it to fall without balance control;
 **Under physics, reaching the full range isn’t guaranteed:** gravity, collisions, and motor strength can prevent a joint from reaching its target. That difference is what this preview lets you see.
 
 -------------
+
+Prompt:
+
+We want to run a simulation to train the humanoid to walk on its own. Each episode is until it falls or hits 1000 time steps. Falling is when a body part other than the feet hit the ground. Make this in a seperate file in the LearningMujoco folder
+
+Response:
+
+Created `LearningMujoco/train_walking.py` with PPO training.
+
+- Gravity enabled; no torso support.
+- **Fall:** any non-foot body part touches the ground.
+- **Episode limit:** 1,000 policy steps.
+- Reward encourages forward movement and staying upright.
+
+Start training:
+
+```bash
+python LearningMujoco/train_walking.py --timesteps 1000000
+```
+
+Export a video afterward:
+
+```bash
+python LearningMujoco/train_walking.py --evaluate --video walking.mp4
+```
+
+Installed the training dependencies and updated `requirements.txt`. Five tests, a short training run, and video export passed. Successful walking still requires longer training and potentially reward/controller tuning.
+
+------------
+
+Prompt:
+
+how will i know how much longer it will take?
+
+Response:
+
+PPO prints progress tables while training. Look for:
+
+- **`total_timesteps`**: training steps completed.
+- **`fps`**: training steps processed per second.
+- **`time_elapsed`**: elapsed seconds.
+
+Estimate the remaining time with:
+
+```text
+remaining seconds = (requested timesteps − total_timesteps) / fps
+```
+
+For example, with 1,000,000 requested steps, 200,000 completed, and 2,000 fps:
+
+```text
+800,000 / 2,000 = 400 seconds ≈ 6 minutes 40 seconds
+```
+
+Use the speed shown after a few progress updates; the initial estimate can fluctuate.
+
+**That estimates when the training run finishes—not when the humanoid learns to walk.** Watch `ep_len_mean`: approaching 1,000 means it survives longer, but you’ll still need to inspect the evaluation video to see whether it walks.
+
+------------
+
+Prompt:
+
+how will i know how much longer it will take?
+
+Response:
+
+PPO prints progress tables while training. Look for:
+
+- **`total_timesteps`**: training steps completed.
+- **`fps`**: training steps processed per second.
+- **`time_elapsed`**: elapsed seconds.
+
+Estimate the remaining time with:
+
+```text
+remaining seconds = (requested timesteps − total_timesteps) / fps
+```
+
+For example, with 1,000,000 requested steps, 200,000 completed, and 2,000 fps:
+
+```text
+800,000 / 2,000 = 400 seconds ≈ 6 minutes 40 seconds
+```
+
+Use the speed shown after a few progress updates; the initial estimate can fluctuate.
+
+**That estimates when the training run finishes—not when the humanoid learns to walk.** Watch `ep_len_mean`: approaching 1,000 means it survives longer, but you’ll still need to inspect the evaluation video to see whether it walks.
+
+---------
+
+Prompt:
+
+What were the original 17 joints?
+
+Response:
+
+The original Gymnasium humanoid has **17 controlled rotations**, grouped as follows:
+
+| Joint group | Rotations per side | Total |
+|---|---:|---:|
+| Abdomen/waist | 3 overall | 3 |
+| Hips | 3 | 6 |
+| Knees | 1 | 2 |
+| Shoulders | 2 | 4 |
+| Elbows | 1 | 2 |
+| **Total** | | **17** |
+
+Their names were:
+
+```text
+abdomen_x
+abdomen_y
+abdomen_z
+
+right_hip_x       left_hip_x
+right_hip_y       left_hip_y
+right_hip_z       left_hip_z
+right_knee        left_knee
+
+right_shoulder1   left_shoulder1
+right_shoulder2   left_shoulder2
+right_elbow       left_elbow
+```
+
+The feet were rigidly attached to the shins, so **there were no ankle joints**.
+
+Our 20-control version removed the three abdomen rotations, added four ankle rotations, and added one shoulder rotation per side:
+
+**17 − 3 + 4 + 2 = 20.**
+
+Both versions also have an **uncontrolled free root joint**, which lets the whole body translate and rotate in space. It isn’t included in the control count.
+
+----------
+
+Prompt:
+
+so what is the fdifference?
+
+Response:
+The difference is **where the humanoid can bend and rotate**:
+
+| Body part | Original model | Our model |
+|---|---|---|
+| Waist | Bends forward/backward, sideways, and twists | Rigid |
+| Ankles | Fixed feet | Each foot bends up/down and tilts sideways |
+| Shoulders | 2 rotations each | 3 rotations each |
+| Hips, knees, elbows | Same | Same |
+| **Total controls** | **17** | **20** |
+
+For walking, our model can adjust its feet at the ankles to help balance, but it **cannot bend its torso relative to its pelvis** to compensate for movement.
+
+More controls don’t automatically make walking easier to learn: the policy has more movements to coordinate.
+
+We also changed **how the controls work**: the original uses motor commands that produce torque; ours uses target angles that position actuators try to reach. That is separate from the change in joint count.
+
+--------
+
+Prompt:
+
+Go back to the original model and it needs to walk better, this guy still falls after 1million runs
+
+Response:
+
+Restored the **original 17-motor humanoid**, including its flexible waist and torque controls. Your contact-based fall rule and 1,000-step limit remain unchanged.
+
+I updated PPO settings, rewards, observations, checkpointing, and evaluation. Eight tests passed.
+
+**It still hasn’t learned reliable walking:** the new one-million-step trial averaged 134 steps and 3.1 meters before falling.
+
+Training is now continuing toward **10 million steps**, with roughly **75 minutes remaining**. Watch progress and ETA:
+
+```bash
+tail -f LearningMujoco/walking_original_run/training.log
+```
+
+Your old model and checkpoints are preserved. The new run automatically saves its best policy, but more training does not guarantee success.
+
+--------
+
+Prompt:
+
+So is it still running?
+
+Response:
+
+Yes—it’s still running.
+
+- **Progress:** approximately 1.9 million of 10 million total steps.
+- **Estimated remaining:** about 86 minutes.
+- **Latest evaluation:** averaged 156 steps and 4.3 meters before falling; no full 1,000-step episodes yet.
+
+Checkpoints are being saved automatically.
+
+-----------
+
+Prompt:
+
+done yet?
+
+Response:
+
+Yes—the **10-million-step training run finished**, and checkpoints are saved.
+
+But it **still hasn’t learned reliable walking**. The checkpoint with the highest evaluation reward averaged:
+
+- **170 steps** before falling
+- **6.5 meters** forward
+- **0 of 5 episodes** reaching 1,000 steps
+
+More training alone didn’t solve it. We need to inspect the learned behavior and revise the reward or training approach.
+
+------------
+
+Prompt:
+
+how do I view it?
+
+Response:
+
+With your virtual environment activated, run:
+
+```bash
+python LearningMujoco/train_walking.py --evaluate --episodes 1 --video walking_best.mp4
+```
+
+This loads the **best saved checkpoint** and exports a video. On your Mac, open it with:
+
+```bash
+open walking_best.mp4
+```
+
+To view the final checkpoint instead, add `--checkpoint policy` to the evaluation command.
+
+-----------
+
+Prompt:
+
+Tell me how this was implemented so I have an understanding of the learning method, paramters, rewards ,etc
+
+Response:
+
+The current implementation uses **PPO to learn motor commands through trial and error in MuJoCo**. We wrote the environment, reward, episode rules, and training setup in `LearningMujoco/train_walking.py`; Stable-Baselines3 supplies the PPO algorithm.
+
+This explanation describes the **current original 17-motor model**, not the earlier 20-joint version.
+
+**1. What happens during training**
+
+The loop is:
+
+```text
+Read the humanoid’s state
+          ↓
+Policy chooses 17 motor commands
+          ↓
+MuJoCo simulates the resulting motion
+          ↓
+Calculate reward and check for a fall
+          ↓
+Store the experience
+          ↓
+After 512 steps, update the neural networks
+```
+
+There are no walking demonstrations or predefined leg movements. The policy starts with randomly initialized weights and learns which actions produce higher rewards. **There is currently no curriculum learning**—every episode starts with the full, unsupported humanoid under gravity.
+
+**2. What the policy observes**
+
+Each observation contains **348 numbers**:
+
+| Information | Count |
+|---|---:|
+| Root height, orientation, and joint angles | 22 |
+| Root and joint velocities | 23 |
+| Body inertia information | 130 |
+| Body linear/angular velocities | 78 |
+| Actuator forces on controlled joints | 17 |
+| External forces and torques on bodies | 78 |
+| **Total** | **348** |
+
+Absolute horizontal position is excluded. This helps the policy choose actions based on its physical state rather than a particular location on the floor.
+
+The policy receives simulator measurements, **not camera images**.
+
+**3. What it controls**
+
+The policy produces **17 motor commands**, each clipped to `[-0.4, 0.4]`.
+
+These control:
+
+- Three abdomen rotations.
+- Three hip rotations per leg.
+- One knee rotation per leg.
+- Two shoulder rotations per arm.
+- One elbow rotation per arm.
+
+These are **not target angles**. The XML’s motor gearing converts each command into joint torque. The resulting angle depends on that torque, gravity, inertia, contacts, and other forces.
+
+During training, actions are sampled from a Gaussian distribution to provide exploration. During evaluation, we use the policy’s mean action without that exploration noise.
+
+**4. Simulation timing and episodes**
+
+| Setting | Value |
+|---|---:|
+| Physics timestep | 0.003 seconds |
+| Physics steps per policy action | 5 |
+| Normal duration of one action | 0.015 seconds |
+| Policy decisions per simulated second | About 66.7 |
+| Maximum episode length | 1,000 policy steps |
+| Maximum simulated episode duration | About 15 seconds |
+
+An episode ends when:
+
+- **Fall:** any body other than the feet touches the floor.
+- **Timeout:** it reaches 1,000 policy steps.
+
+We check contacts after **every physics substep**, so a brief impact between policy decisions still counts. Positive-distance proximity contacts do not count as touching.
+
+A fall is reported as `terminated=True`; a timeout is `truncated=True`. That distinction matters because PPO can treat a time limit as an artificial interruption rather than a failed terminal state.
+
+At reset, we restore the starting pose and add small random perturbations to positions and velocities, uniformly between `−0.01` and `0.01` in their respective coordinate units.
+
+**5. The reward**
+
+The current reward per policy step is:
+
+\[
+r = 1.25v_x + r_{\text{upright}}
+    - 0.1\sum_i a_i^2
+    - \min\left(5\times10^{-7}\sum_j F_j^2,\ 10\right)
+\]
+
+Here is what each term means:
+
+| Term | Purpose |
+|---|---|
+| `1.25 × forward_velocity` | Reward moving the whole-body center of mass in world `+X` |
+| Upright reward | Give `+5` when root height is between 1 and 2 meters and no fall occurred |
+| Control cost | Penalize large motor commands |
+| Contact cost | Penalize large external contact forces/torques, capped at 10 |
+
+For example, moving forward at 1 m/s while receiving the upright reward gives **6.25 reward before costs**.
+
+There are several important details:
+
+- The “upright” condition checks **height**, not torso orientation directly.
+- There is **no separate fixed fall penalty** in the current implementation. A fall ends the episode and removes future reward.
+- There is no explicit reward for alternating feet, a particular gait, smooth movement, or maintaining a target walking speed.
+- The control cost is a penalty on squared commands, not a measurement of mechanical energy.
+
+The reward therefore specifies **forward movement and survival**, but does not fully specify what we would visually recognize as good walking.
+
+**6. How PPO learns**
+
+PPO uses two neural networks:
+
+| Network | Job | Architecture |
+|---|---|---|
+| Actor/policy | Choose motor commands | 348 inputs → 256 → 256 → 17 action means |
+| Critic/value | Predict future discounted reward | 348 inputs → 256 → 256 → 1 value |
+
+Both use ReLU activations. The actor also learns the action distribution’s standard deviations.
+
+For each training update:
+
+1. Collect 512 steps using the current policy. This can span several episodes.
+2. Estimate which actions performed better or worse than the critic expected. This estimate is called the **advantage**.
+3. Make advantageous actions more likely and disadvantageous actions less likely.
+4. Update the critic to better predict returns.
+
+PPO’s clipped objective discourages excessively large policy changes during an update. It is not a hard guarantee that behavior will only change a little. [Stable-Baselines3 PPO documentation](https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html)
+
+**7. The training parameters**
+
+These are the values explicitly configured in the current script:
+
+| Parameter | Value | Meaning |
+|---|---:|---|
+| `learning_rate` | `0.0000356987` | Size of optimizer updates |
+| `n_steps` | `512` | New experiences collected before updating |
+| `batch_size` | `256` | Experiences per optimization minibatch |
+| `n_epochs` | `5` | Passes over each collected rollout |
+| `gamma` | `0.95` | Discount applied to future rewards |
+| `gae_lambda` | `0.9` | Controls the advantage estimator’s bias/variance tradeoff |
+| `clip_range` | `0.3` | PPO probability-ratio clipping parameter |
+| `ent_coef` | `0.00238306` | Encourages exploration |
+| `vf_coef` | `0.431892` | Weight of the critic’s prediction loss |
+| `max_grad_norm` | `2` | Limits gradient magnitude |
+| `log_std_init` | `−2` | Initial action standard deviation is approximately `0.135` |
+| `ortho_init` | `False` | Disables orthogonal network initialization |
+
+We used **one environment**, running on CPU with one PyTorch thread.
+
+These settings came from the RL Baselines3 Zoo Humanoid baseline. They were **not tuned specifically for our contact-based falling rule**, which differs from the standard task.
+
+One parameter worth examining is `gamma=0.95`. A reward 20 steps ahead receives a discount factor of:
+
+\[
+0.95^{20}\approx0.36
+\]
+
+Twenty steps represent only about **0.3 simulated seconds**. This gives relatively strong emphasis to near-term reward. It is a possible tuning concern, not proof of why training failed.
+
+**8. Normalization**
+
+`VecNormalize` maintains running statistics to scale observations and rewards during training. This helps inputs with very different magnitudes—angles, velocities, and forces—work together.
+
+Evaluation uses frozen observation statistics and reports **raw environment rewards**. The normalization file must match the policy checkpoint; loading the policy without its corresponding statistics changes what the network effectively sees. [Normalization documentation](https://stable-baselines3.readthedocs.io/en/master/guide/vec_envs.html#vecnormalize)
+
+**9. How we selected the best policy**
+
+During the long run, we evaluated every **100,000 training steps**, using five fixed evaluation seeds and deterministic actions.
+
+We recorded:
+
+- Total reward.
+- Episode length.
+- Forward distance.
+- Fraction reaching 1,000 steps without falling.
+
+**“Best” means highest average evaluation reward**, not longest survival or most natural gait. Because these same five seeds were repeatedly used for checkpoint selection, a stronger final assessment would also use fresh seeds.
+
+The selected checkpoint, from about **8.8 million steps**, averaged:
+
+| Metric | Result |
+|---|---:|
+| Episode reward | 1,214.6 |
+| Episode length | 170 steps |
+| Forward distance | 6.47 meters |
+| Full-length episodes | 0 of 5 |
+
+That is only about **2.55 seconds before falling**. It demonstrates why higher reward alone was insufficient evidence of successful walking. The next investigation should examine the motion and reward components, then test changes to the objective or training method rather than assume that more steps will fix it.
+
+----------------
+
+Prompt:
+
+can you add git ignore to all videos
+
+Response:
+

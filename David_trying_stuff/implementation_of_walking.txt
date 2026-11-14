@@ -1,0 +1,166 @@
+The current implementation uses PPO to learn motor commands through trial and error in MuJoCo. We wrote the environment, reward, episode rules, and training setup in LearningMujoco/train_walking.py; Stable-Baselines3 supplies the PPO algorithm.
+
+This explanation describes the current original 17-motor model, not the earlier 20-joint version.
+
+1. What happens during training
+
+The loop is:
+Read the humanoid’s state
+          ↓
+Policy chooses 17 motor commands
+          ↓
+MuJoCo simulates the resulting motion
+          ↓
+Calculate reward and check for a fall
+          ↓
+Store the experience
+          ↓
+After 512 steps, update the neural networks
+There are no walking demonstrations or predefined leg movements. The policy starts with randomly initialized weights and learns which actions produce higher rewards. There is currently no curriculum learning—every episode starts with the full, unsupported humanoid under gravity.
+
+2. What the policy observes
+
+Each observation contains 348 numbers:
+Information	Count
+Root height, orientation, and joint angles	22
+Root and joint velocities	23
+Body inertia information	130
+Body linear/angular velocities	78
+Actuator forces on controlled joints	17
+External forces and torques on bodies	78
+Total	348
+
+
+Absolute horizontal position is excluded. This helps the policy choose actions based on its physical state rather than a particular location on the floor.
+
+The policy receives simulator measurements, not camera images.
+
+3. What it controls
+
+The policy produces 17 motor commands, each clipped to [-0.4, 0.4].
+
+These control:
+- Three abdomen rotations.
+- Three hip rotations per leg.
+- One knee rotation per leg.
+- Two shoulder rotations per arm.
+- One elbow rotation per arm.
+These are not target angles. The XML’s motor gearing converts each command into joint torque. The resulting angle depends on that torque, gravity, inertia, contacts, and other forces.
+
+During training, actions are sampled from a Gaussian distribution to provide exploration. During evaluation, we use the policy’s mean action without that exploration noise.
+
+4. Simulation timing and episodes
+Setting	Value
+Physics timestep	0.003 seconds
+Physics steps per policy action	5
+Normal duration of one action	0.015 seconds
+Policy decisions per simulated second	About 66.7
+Maximum episode length	1,000 policy steps
+Maximum simulated episode duration	About 15 seconds
+
+
+An episode ends when:
+- Fall: any body other than the feet touches the floor.
+- Timeout: it reaches 1,000 policy steps.
+We check contacts after every physics substep, so a brief impact between policy decisions still counts. Positive-distance proximity contacts do not count as touching.
+
+A fall is reported as terminated=True; a timeout is truncated=True. That distinction matters because PPO can treat a time limit as an artificial interruption rather than a failed terminal state.
+
+At reset, we restore the starting pose and add small random perturbations to positions and velocities, uniformly between −0.01 and 0.01 in their respective coordinate units.
+
+5. The reward
+
+The current reward per policy step is:
+\[
+r = 1.25v_x + r_{\text{upright}}
+    - 0.1\sum_i a_i^2
+    - \min\left(5\times10^{-7}\sum_j F_j^2,\ 10\right)
+\]
+Here is what each term means:
+Term	Purpose
+1.25 × forward_velocity	Reward moving the whole-body center of mass in world +X
+Upright reward	Give +5 when root height is between 1 and 2 meters and no fall occurred
+Control cost	Penalize large motor commands
+Contact cost	Penalize large external contact forces/torques, capped at 10
+
+
+For example, moving forward at 1 m/s while receiving the upright reward gives 6.25 reward before costs.
+
+There are several important details:
+- The “upright” condition checks height, not torso orientation directly.
+- There is no separate fixed fall penalty in the current implementation. A fall ends the episode and removes future reward.
+- There is no explicit reward for alternating feet, a particular gait, smooth movement, or maintaining a target walking speed.
+- The control cost is a penalty on squared commands, not a measurement of mechanical energy.
+The reward therefore specifies forward movement and survival, but does not fully specify what we would visually recognize as good walking.
+
+6. How PPO learns
+
+PPO uses two neural networks:
+Network	Job	Architecture
+Actor/policy	Choose motor commands	348 inputs → 256 → 256 → 17 action means
+Critic/value	Predict future discounted reward	348 inputs → 256 → 256 → 1 value
+
+
+Both use ReLU activations. The actor also learns the action distribution’s standard deviations.
+
+For each training update:
+1. Collect 512 steps using the current policy. This can span several episodes.
+2. Estimate which actions performed better or worse than the critic expected. This estimate is called the advantage.
+3. Make advantageous actions more likely and disadvantageous actions less likely.
+4. Update the critic to better predict returns.
+PPO’s clipped objective discourages excessively large policy changes during an update. It is not a hard guarantee that behavior will only change a little. Stable-Baselines3 PPO documentation
+
+7. The training parameters
+
+These are the values explicitly configured in the current script:
+Parameter	Value	Meaning
+learning_rate	0.0000356987	Size of optimizer updates
+n_steps	512	New experiences collected before updating
+batch_size	256	Experiences per optimization minibatch
+n_epochs	5	Passes over each collected rollout
+gamma	0.95	Discount applied to future rewards
+gae_lambda	0.9	Controls the advantage estimator’s bias/variance tradeoff
+clip_range	0.3	PPO probability-ratio clipping parameter
+ent_coef	0.00238306	Encourages exploration
+vf_coef	0.431892	Weight of the critic’s prediction loss
+max_grad_norm	2	Limits gradient magnitude
+log_std_init	−2	Initial action standard deviation is approximately 0.135
+ortho_init	False	Disables orthogonal network initialization
+
+
+We used one environment, running on CPU with one PyTorch thread.
+
+These settings came from the RL Baselines3 Zoo Humanoid baseline. They were not tuned specifically for our contact-based falling rule, which differs from the standard task.
+
+One parameter worth examining is gamma=0.95. A reward 20 steps ahead receives a discount factor of:
+\[
+0.95^{20}\approx0.36
+\]
+Twenty steps represent only about 0.3 simulated seconds. This gives relatively strong emphasis to near-term reward. It is a possible tuning concern, not proof of why training failed.
+
+8. Normalization
+
+VecNormalize maintains running statistics to scale observations and rewards during training. This helps inputs with very different magnitudes—angles, velocities, and forces—work together.
+
+Evaluation uses frozen observation statistics and reports raw environment rewards. The normalization file must match the policy checkpoint; loading the policy without its corresponding statistics changes what the network effectively sees. Normalization documentation
+
+9. How we selected the best policy
+
+During the long run, we evaluated every 100,000 training steps, using five fixed evaluation seeds and deterministic actions.
+
+We recorded:
+- Total reward.
+- Episode length.
+- Forward distance.
+- Fraction reaching 1,000 steps without falling.
+“Best” means highest average evaluation reward, not longest survival or most natural gait. Because these same five seeds were repeatedly used for checkpoint selection, a stronger final assessment would also use fresh seeds.
+
+The selected checkpoint, from about 8.8 million steps, averaged:
+Metric	Result
+Episode reward	1,214.6
+Episode length	170 steps
+Forward distance	6.47 meters
+Full-length episodes	0 of 5
+
+
+That is only about 2.55 seconds before falling. It demonstrates why higher reward alone was insufficient evidence of successful walking. The next investigation should examine the motion and reward components, then test changes to the objective or training method rather than assume that more steps will fix it.

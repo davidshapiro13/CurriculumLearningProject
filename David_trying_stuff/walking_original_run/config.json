@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "seed": 0,
+  "control": "17 stock torque motors",
+  "max_episode_steps": 1000,
+  "timestep": 0.003,
+  "frame_skip": 5,
+  "hyperparameters_source": "https://github.com/DLR-RM/rl-baselines3-zoo/blob/master/hyperparams/ppo.yml#L474",
+  "requested_timesteps": 100000
+}
