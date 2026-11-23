@@ -1175,3 +1175,934 @@ can you add git ignore to all videos
 
 Response:
 
+Added `.gitignore` rules for common video formats across all folders.
+
+Also stopped tracking the eight existing videos in Git. **All local video files are preserved.**
+
+---------
+Prompt:
+
+Added `.gitignore` rules for common video formats across all folders.
+
+Also stopped tracking the eight existing videos in Git. **All local video files are preserved.**
+
+Response:
+
+To **unstage everything without deleting local files**, run:
+
+```bash
+git restore --staged .
+```
+
+However, the videos marked **`D` were staged for removal from Git tracking**—the local files remain. Unstaging those removals makes Git track them again.
+
+If GitHub rejects your **push** because files are too large, unstaging won’t fix it: the videos may already be in earlier commits, and `.gitignore` doesn’t remove them from history.
+
+Paste the exact size error so we can determine whether you need to fix the staging area or remove videos from commit history.
+
+-----------
+
+Prompt:
+
+Writing objects: 100% (21401/21401), 159.55 MiB | 10.61 MiB/s, done.
+Total 21401 (delta 8382), reused 21373 (delta 8368), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (8382/8382), completed with 5 local objects.
+remote: error: Trace: d4a93cfbb665819ea2f9ba047d3c10c52602cff3650853f54adc41c4bc3d19b9
+remote: error: See https://gh.io/lfs for more information.
+remote: error: File .venv/lib/python3.10/site-packages/torch/lib/libtorch_cpu.dylib is 368.13 MB; this exceeds GitHub's file size limit of 100.00 MB
+remote: error: GH001: Large files detected. You may want to try Git Large File Storage - https://git-lfs.github.com.
+remote: pre-receive hook declined
+To https://github.com/davidshapiro13/CurriculumLearningProject.git
+ ! [remote rejected]   main -> main (pre-receive hook declined)
+error: failed to push some refs to 'https://github.com/davidshapiro13/CurriculumLearningProject.git'
+
+Response:
+
+Fixed locally. The oversized file was inside `.venv`, not a video.
+
+- Added virtual environments and Python caches to `.gitignore`.
+- Replaced the two unpushed commits with one clean commit; kept a backup branch.
+- Preserved your local files and uncommitted AI log edits.
+- Verified no new files exceed GitHub’s limit.
+
+Push again:
+
+```bash
+git push origin main
+```
+
+No force push is needed.
+
+---------
+
+Prompt:
+
+So what type of things can we try to improve the walking?
+
+Response:
+
+I’d focus on **reward design, how far ahead PPO plans, and a standing-to-walking curriculum**. Our run improved reward without learning reliable balance, so simply repeating the same training longer isn’t the strongest next experiment.
+
+These are hypotheses to test, not guaranteed fixes.
+
+**1. Diagnose how it falls**
+
+Watch several episodes and log torso tilt, forward speed, foot contacts, and the body part that first touches the ground.
+
+That distinguishes different problems:
+
+| Observed behavior | Possible issue |
+|---|---|
+| Lunges forward and falls | Forward-speed reward may favor short bursts |
+| Stands still | Survival is easier to reward than walking |
+| Moves violently or jitters | Exploration or rapidly changing motor commands |
+| Consistently falls sideways | Poor lateral balance |
+| Looks stable, but episode suddenly ends | Contact detection or an unexpected body-floor contact |
+
+Also run a stock Gymnasium Humanoid baseline with the same PPO configuration. Comparing it with our custom environment would help isolate whether our task changes contribute to the difficulty.
+
+**2. Reward a controlled walking speed**
+
+Currently, faster forward movement keeps increasing reward. We could instead reward matching a target speed, initially around **0.5 m/s**:
+
+\[
+r_{\text{speed}}=\exp\left(-\frac{(v_x-v_{\text{target}})^2}{\sigma^2}\right)
+\]
+
+This rewards being near the requested speed rather than accelerating indefinitely.
+
+Other candidates are:
+
+- **Torso orientation:** reward keeping its upward axis aligned with vertical. Our current “upright” reward only checks height.
+- **Sideways motion:** a modest penalty for lateral velocity.
+- **Action smoothness:** a small penalty on \(\|a_t-a_{t-1}\|^2\). We should then include the previous action in the observation.
+- **Explicit fall penalty:** worth testing, although excessively large penalties can discourage movement.
+
+I would introduce these separately so we can identify what actually helps.
+
+**3. Test a longer planning horizon**
+
+Our current discount factor is **`gamma=0.95`**, with an action every 0.015 seconds. Future rewards lose weight quickly.
+
+A useful comparison is:
+
+| Experiment | `gamma` | Approximate discounted horizon \(1/(1-\gamma)\) |
+|---|---:|---:|
+| Current baseline | 0.95 | 20 steps ≈ 0.3 seconds |
+| Longer horizon | 0.99 | 100 steps ≈ 1.5 seconds |
+| Longer still | 0.995 | 200 steps ≈ 3 seconds |
+
+These horizons are rough interpretations, not hard limits. A larger gamma might make future falls matter more, but can also make learning harder. I’d test **0.99 first**, keeping the reward unchanged.
+
+**4. Use curriculum learning**
+
+This is especially relevant to your project. One proposed curriculum is:
+
+| Stage | Task | Example advancement criterion |
+|---|---|---|
+| 1 | Stand and balance | Survive 500 steps in most evaluation episodes |
+| 2 | Walk slowly at 0.25 m/s | Stay upright while tracking the requested speed |
+| 3 | Walk at 0.5 m/s | Maintain speed over longer episodes |
+| 4 | Walk at 1 m/s | Complete 1,000-step episodes reliably |
+
+The thresholds would be experiment settings, not established optimal values.
+
+To make this clean, include **target speed in the observation**, use the same speed-tracking reward throughout, and gradually change the distribution of requested speeds. Advancing should depend on both survival and speed tracking; otherwise a policy might pass by standing still.
+
+We could also try temporary physical assistance that gradually decreases, but final evaluations must use **full gravity and no assistance**. Standing-first training can itself get stuck in a stationary strategy, so it needs a comparison against direct walking training.
+
+**5. Improve the experiment design**
+
+For each promising change:
+
+- Use several training seeds—ideally at least three.
+- Keep the total interaction budget comparable.
+- Measure survival, speed error, and forward distance.
+- Evaluate on fresh seeds beyond those used to select checkpoints.
+- Inspect videos as well as reward.
+
+RL results can vary substantially across seeds, and custom environments need their own tuning. [Stable-Baselines3 guidance](https://stable-baselines3.readthedocs.io/en/master/guide/rl_tips.html)
+
+If learning from scratch remains unsuccessful, **motion imitation** is another route: supply a reference walking motion and reward following it while satisfying the task. That changes the project’s assumptions because demonstrations are now available. DeepMimic demonstrates this approach for physics-based character control. [DeepMimic paper](https://arxiv.org/abs/1804.02717)
+
+**My first experiment would be `gamma=0.99` with everything else held constant.** Then I’d compare direct speed-tracking training against a speed curriculum. That gives you interpretable results and a clear curriculum-learning research question.
+
+------------
+
+Prompt:
+
+how can I change thr reward?
+
+Response:
+
+The reward is calculated inside `WalkingEnv.step()` in **`David_trying_stuff/train_walking.py`**, around lines **123–128**.
+
+Currently:
+
+```python
+height = float(self.data.qpos[2])
+upright_reward = 5.0 if not terminated and 1.0 < height < 2.0 else 0.0
+
+effort_cost = 0.1 * float(np.sum(action ** 2))
+
+mujoco.mj_rnePostConstraint(self.model, self.data)
+contact_cost = min(
+    5e-7 * float(np.sum(self.data.cfrc_ext ** 2)),
+    10.0,
+)
+
+reward = (
+    1.25 * forward_velocity
+    + upright_reward
+    - effort_cost
+    - contact_cost
+)
+```
+
+**To adjust the existing reward**, change the coefficients:
+
+| Change | Effect on the objective |
+|---|---|
+| Increase `1.25` | Give more importance to forward speed |
+| Increase `5.0` | Give more importance to staying at standing height |
+| Increase `0.1` | Penalize large motor commands more |
+| Increase `5e-7` | Penalize contact forces more |
+
+These change what the policy optimizes; they don’t guarantee the resulting behavior.
+
+**For example, to reward controlled walking instead of unlimited speed**, keep the existing calculations and replace the final `reward = ...` statement with:
+
+```python
+target_speed = 0.5   # Desired forward speed, in meters/second
+speed_tolerance = 0.5
+
+# Maximum of 1 when actual speed matches target_speed.
+speed_reward = np.exp(
+    -((forward_velocity - target_speed) / speed_tolerance) ** 2
+)
+
+reward = (
+    2.0 * speed_reward
+    + upright_reward
+    - effort_cost
+    - contact_cost
+)
+```
+
+Here, moving at `0.5 m/s` earns the maximum speed reward. Moving much slower **or faster** earns less. The weights and target speed are starting choices to test.
+
+You can also add an explicit fall penalty:
+
+```python
+if terminated:
+    reward -= 10.0
+```
+
+However, I’d test the speed-reward change first, then test the fall penalty separately.
+
+**Start a new run to compare the reward fairly:**
+
+```bash
+python David_trying_stuff/train_walking.py \
+  --timesteps 1000000 \
+  --output David_trying_stuff/walking_speed_reward
+```
+
+Changing the reward does **not** change an already-trained policy’s behavior. It affects future training and the scores calculated during evaluation. Use separate run folders, and compare survival and walking speed—not just total reward, since the reward formulas differ.
+
+----------
+
+Prompt:
+
+Whart if I did 1.5 < height < 2.0
+
+Response:
+
+Changing it to:
+
+```python
+upright_reward = 5.0 if not terminated and 1.5 < height < 2.0 else 0.0
+```
+
+means the humanoid only receives the **+5 reward when its root height is above 1.5 meters**.
+
+But the original model starts with its torso/root at approximately **1.4 meters**. This measures the root’s position—not the top of its head.
+
+So a normal standing pose would receive **no upright reward**. The policy might try to jump or stretch upward to earn it, rather than learn stable walking.
+
+It also **wouldn’t end the episode** below 1.5 meters; your fall condition would still be non-foot ground contact.
+
+If your goal is to discourage crouching, a better experiment is to reward staying near its normal standing height:
+
+```python
+height_reward = 5.0 * np.exp(
+    -((height - 1.4) / 0.15) ** 2
+)
+upright_reward = 0.0 if terminated else height_reward
+```
+
+This gives the highest reward near **1.4 meters**, decreasing smoothly above or below it. The `0.15` controls how tightly you encourage that height. These are starting values to test.
+
+------
+
+Prompt:
+
+File "/Users/davidshapiro/Desktop - Duck Duck Goose pro/Grad School/Year 2/Semester 1/Courses/Reinforcement Learning/Final Project/CurriculumLearningProject/David_trying_stuff/train_walking.py", line 321, in <module>
+    main()
+  File "/Users/davidshapiro/Desktop - Duck Duck Goose pro/Grad School/Year 2/Semester 1/Courses/Reinforcement Learning/Final Project/CurriculumLearningProject/David_trying_stuff/train_walking.py", line 216, in main
+    args.output.mkdir(parents=True, exist_ok=False)
+  File "/opt/homebrew/Cellar/python@3.10/3.10.19_1/Frameworks/Python.framework/Versions/3.10/lib/python3.10/pathlib.py", line 1175, in mkdir
+    self._accessor.mkdir(self, mode)
+FileExistsError: [Errno 17] File exists: '/Users/davidshapiro/Desktop - Duck Duck Goose pro/Grad School/Year 2/Semester 1/Courses/Reinforcement Learning/Final Project/CurriculumLearningProject/David_trying_stuff/walking_original_run'
+
+Response:
+
+That folder already contains a training run. The script refuses to overwrite it.
+
+**For your changed reward, start a new run with a different output folder:**
+
+```bash
+python David_trying_stuff/train_walking.py \
+  --timesteps 1000000 \
+  --output David_trying_stuff/walking_height_reward
+```
+
+Choose another name if that folder also exists.
+
+To continue the previous run instead:
+
+```bash
+python David_trying_stuff/train_walking.py --resume --timesteps 1000000
+```
+
+Since you changed the reward, a **new run is better for comparing results**. Resuming would continue from the old policy using your newly edited reward.
+
+--------------
+
+Prompt:
+
+I notice the humanoid's feet turn backwards so I want to encourage the bot to have legs and waist stay forward, how can I promote this?
+
+Response:
+
+You can add a **heading reward**: reward the pelvis, torso, and feet for pointing in the walking direction—currently world **+X**.
+
+Avoid directly forcing every hip or waist angle toward zero: some rotation is useful for walking and balance.
+
+In `WalkingEnv.step()`, before calculating the final `reward`, add:
+
+```python
+def forward_alignment(body_name):
+    # Body orientation: columns are its local axes in world coordinates.
+    rotation = self.data.body(body_name).xmat.reshape(3, 3)
+
+    # Project the body's local +X direction onto the horizontal plane.
+    forward_xy = rotation[:2, 0]
+    length = np.linalg.norm(forward_xy)
+
+    if length < 1e-6:
+        return 0.0
+
+    # Alignment with world +X: +1 forward, 0 sideways, -1 backward.
+    return float(forward_xy[0] / length)
+
+
+pelvis_alignment = forward_alignment("pelvis")
+torso_alignment = forward_alignment("torso")
+left_foot_alignment = forward_alignment("left_foot")
+right_foot_alignment = forward_alignment("right_foot")
+
+heading_reward = (
+    0.5 * pelvis_alignment
+    + 0.5 * torso_alignment
+    + 0.25 * left_foot_alignment
+    + 0.25 * right_foot_alignment
+)
+```
+
+Then include it in your existing reward:
+
+```python
+reward = (
+    1.25 * forward_velocity
+    + upright_reward
+    + heading_reward
+    - effort_cost
+    - contact_cost
+)
+```
+
+These are **initial weights to experiment with**. The heading term ranges from approximately **−1.5 to +1.5**. It favors facing forward while leaving room for the rotations needed to balance.
+
+A few details matter:
+
+- This assumes each body’s **local +X axis represents forward**. Check that in your model before relying on the reward.
+- The original humanoid has **spherical feet and no ankle joints**. Their appearance alone doesn’t reveal a toe direction; their orientation follows the shin.
+- Foot alignment doesn’t fully describe where the knees point. If the knees still twist, we can also measure thigh/shin orientation or add a small penalty for excessive hip twisting.
+- Heading only measures horizontal direction. It does not replace your height, balance, or fall conditions.
+
+Also add the component to `info` so you can inspect it:
+
+```python
+"heading_reward": heading_reward,
+```
+
+Start a separate training run for this reward change. An existing policy won’t change its movement merely because you edit the reward—it needs further training.
+
+--------
+
+Prompt:
+
+I notice the left leg is straight a lot. We need to encourage knee movement on both legs
+
+Response:
+
+Yes—but **rewarding knee movement alone can teach it to shake its legs**. A better target is for each knee to bend while that leg swings forward, then straighten more when supporting the body.
+
+For a first experiment, add a **small, alternating knee-target penalty**:
+
+```python
+# One complete left/right cycle per second.
+phase = 2 * np.pi * 1.0 * self.data.time
+
+# Targets alternate between approximately -5° and -45°.
+# In this model, more negative knee angles mean more bending.
+left_target = np.deg2rad(-25 + 20 * np.sin(phase))
+right_target = np.deg2rad(-25 - 20 * np.sin(phase))
+
+left_knee = float(self.data.joint("left_knee").qpos[0])
+right_knee = float(self.data.joint("right_knee").qpos[0])
+
+knee_tracking_cost = 0.25 * (
+    (left_knee - left_target) ** 2
+    + (right_knee - right_target) ** 2
+)
+```
+
+Subtract it from your reward:
+
+```python
+reward = (
+    # Your existing reward terms...
+    reward - knee_tracking_cost
+)
+```
+
+Here, `reward` should already contain your existing reward calculation. You can simply write:
+
+```python
+reward -= knee_tracking_cost
+```
+
+**Important: include the phase in the observation.** Otherwise, the policy is asked to follow a changing target without being told where it is in the cycle:
+
+```python
+# Append these to the existing observation:
+np.array([np.sin(phase), np.cos(phase)])
+```
+
+Also increase the observation-space dimension by **2**. That changes the policy’s input shape, so start a new training run rather than loading an old checkpoint.
+
+The frequency, angles, and weight above are **experimental starting values**, not a validated walking pattern. This encourages both knees to participate, but it can still produce marching or destabilize the supporting leg. A more flexible next version would condition knee bending on **which foot is supporting weight**, rather than prescribing a fixed rhythm.
+
+----------
+
+Prompt:
+
+I want to change the failure rule so that if the legs are turned more than +-70 degreegs (left and right direction), that is a fail
+
+Response:
+
+Added the rule in `David_trying_stuff/train_walking.py`.
+
+- Either leg turning **beyond ±70° from world-forward (+X)** ends the episode.
+- Exactly ±70° is allowed.
+- Knee bending and forward/backward hip movement don’t count as turning.
+- Ground-contact failure and the 1,000-step limit remain.
+- `info` reports each leg’s heading and which leg triggered failure.
+
+All **12 tests passed**. The rule applies when you next start training or evaluation.
+
+--------
+
+Prompt:
+
+undo that it was awful
+
+Response:
+
+Removed the ±70° failure rule. Episodes again end only on non-foot ground contact or the 1,000-step limit.
+
+Your existing rewards remain unchanged. All 8 tests passed.
+
+---------
+
+Prompt:
+
+I want to make a new attempt at this. Follow these instructions:
+I am building a reinforcement learning project where I want to train the basic Mujoco Gynamsium Humanoid to run. Use Proximal Policy Optimization (PPO) to train.
+<EPISODE>
+Each episode, the agent should reset to the start in standing position. The episode terminates if any part of body other than feet touch ground. There should be a big penalty for this.
+
+
+The episode also ends if the agent runs a distance of 20. If this happens,  the agent should receive a large positive reward.
+</EPISODE>
+<MOVEMENT>
+The agent should be encouraged through reward to stay facing forward with minimal sideways movement. Both knees should be working (no straight legs dragging), symmetry (something happens on left, then right, etc) should also be encouraged.
+</MOVEMENT>
+
+<CODE STRUCTURE>
+The code for this should be written in the folder Training_run and it should be written so the  basic boilerplate is seperate from the parts I need to adjust, hyper-parameters, rewards, etc. IT should be clear where those are for me to adjust.
+</CODE STRUCTURE>
+
+<RUNNING>
+The user should be able to run the code from command line with an option to set the number of episodes. Then it should be able to generate a video of the best run.
+</RUNNING>
+
+Response:
+
+Implemented the fresh setup in **`Training_run/`**, independent of previous attempts.
+
+- Stock 17-motor Humanoid trained with PPO.
+- **−200** for non-foot ground contact.
+- **+500** for reaching 20 meters forward.
+- Rewards encourage forward heading, minimal sideways movement, and alternating knee bends.
+- Configurable 2,000-step timeout prevents stalled episodes from lasting forever.
+
+Adjust these files:
+
+| File | What to change |
+|---|---|
+| `Training_run/config.json` | PPO parameters, reward weights, target speed, knee rhythm, episode settings |
+| `Training_run/rewards.py` | Reward formulas |
+| `Training_run/README.md` | Instructions and explanations |
+
+From the project root, train with:
+
+```bash
+python -m Training_run train \
+  --episodes 10000 \
+  --run Training_run/runs/attempt_01
+```
+
+Then generate a best-run video:
+
+```bash
+python -m Training_run video \
+  --run Training_run/runs/attempt_01
+```
+
+This selects the best episode from five evaluation trials and writes `best_run.mp4`. Successful finishes take priority when selecting checkpoints.
+
+**Verified:** 11 tests, a 100-episode smoke run with PPO updates, and video export. No long training run is active, and these initial reward settings have not yet produced reliable running.
+
+-----------
+
+Prompt:
+
+Interestingly, it is doing much worse than it did in the old system. What is inherently different?
+
+Response:
+
+**The main difference is that I changed the learning problem substantially—not just the code organization.** I changed reward scales, added several movement objectives, and changed PPO settings simultaneously. That made this a new, unvalidated setup rather than a controlled improvement on the old one.
+
+Your logs confirm the regression:
+
+- **100,000 episodes, 12.25 million training steps.**
+- **Every training episode ended in a fall.**
+- The best evaluated policy averaged **0.96 meters**, compared with approximately **6.47 meters** for the earlier original-model run.
+- The last 100 training episodes averaged only **0.04 meters of net forward progress**.
+
+So this isn’t simply a smaller training budget.
+
+**1. Staying upright became much less rewarding**
+
+The old reward gave up to **+5 every action** for standing height. In the new code, upright reward is multiplied by the action duration, approximately `0.015` seconds.
+
+| Reward component | Old system | New system |
+|---|---:|---:|
+| Maximum upright reward per action | `5.0` | `0.015` |
+| Forward reward at 1 m/s | `1.25` | `0.15` from progress |
+| Explicit fall penalty | None | `−200` |
+| Finish bonus | None | `+500` at 20 m |
+
+The maximum upright reward became roughly **333 times smaller**, while the progress reward became about **8 times smaller**. Consequently, upright posture also became much less valuable **relative to forward progress**.
+
+Time-scaling rewards can be reasonable, but I did not adequately rebalance the coefficients when introducing it.
+
+**2. The fall penalty dominates the observed rewards**
+
+Here are component totals from your final training episode:
+
+| Component | Episode total |
+|---|---:|
+| Forward progress | +5.18 |
+| Upright posture | +0.32 |
+| Forward heading | +1.19 |
+| Knee coordination | +0.007 |
+| Action-change penalty | −2.25 |
+| Fall | **−200** |
+| Finish | **0** |
+
+A large fall penalty does provide a learning signal—particularly for delaying a fall—but it doesn’t tell the agent *how* to balance. Meanwhile, the finish bonus was never experienced in any of those 100,000 training episodes.
+
+Reward normalization does **not** fix these relative weights: it scales the combined reward, rather than balancing each component independently.
+
+**3. The new movement objectives are harder to satisfy**
+
+Previously, the agent primarily needed to move forward and maintain standing height.
+
+Now it also needs to:
+
+- Approach a target speed of 3 m/s.
+- Avoid lateral displacement and velocity.
+- Keep the torso and pelvis facing forward.
+- Follow alternating knee targets at **1.4 cycles per second**.
+- Avoid abrupt action changes.
+
+The knee reward is especially restrictive: it requires both knees to match prescribed angles, while also moving forward and maintaining upright posture. Its tiny logged contribution suggests it is providing little useful positive feedback in this run.
+
+That is a plausible problem, not proof that knee shaping itself is harmful.
+
+**4. PPO changed significantly too**
+
+| Parameter | Old | New |
+|---|---:|---:|
+| Learning rate | `0.0000357` | `0.0003`—about **8.4× higher** |
+| Optimization epochs per rollout | 5 | 10 |
+| Rollout length | 512 | 1,024 |
+| Discount factor | 0.95 | 0.995 |
+| Hidden-layer activation | ReLU | Tanh |
+| Observations | 348 | 369 |
+
+The longer discount horizon was intentional, but it changes the learning dynamics. The higher learning rate and additional optimization passes could also contribute to unstable or unproductive updates.
+
+One subtlety: action normalization itself did **not** increase motor strength. The new `[-1, 1]` outputs are converted back to the same stock `[-0.4, 0.4]` controls.
+
+**5. The body is essentially unchanged**
+
+Both attempts use the stock 17-motor humanoid, gravity, and five physics steps per action. The major differences are in **what we reward and how we train**, not the mechanical body.
+
+My proposed correction is to **keep the cleaner `Training_run` structure but restore the old learning baseline first**. Then introduce the requested changes individually:
+
+1. Restore the old dense reward balance and PPO settings.
+2. Add the 20-meter finish and terminal rewards, with deliberately balanced magnitudes.
+3. Test sideways-motion penalties.
+4. Add knee coordination last, starting with a small weight.
+
+That would let us determine which change helps. The current run cannot isolate the cause because too many things changed together.
+
+-----------
+
+Prompt:
+
+Yes, bring the old set up into the cleaned up code. I want one file with all settings I can tweak. Can those just be bascially be a lfile that is just a list of variables I can change?
+
+Response:
+
+Yes—implemented. **`Training_run/config.py` is now your single settings file**, containing plain variables such as:
+
+```python
+TRAIN_EPISODES = 10000
+
+PPO_LEARNING_RATE = 3.56987e-5
+PPO_GAMMA = 0.95
+
+REWARD_UPRIGHT_WEIGHT = 5.0
+REWARD_FORWARD_VELOCITY_WEIGHT = 1.25
+REWARD_FALL_PENALTY = 200.0
+REWARD_FINISH_BONUS = 500.0
+
+ENV_FINISH_DISTANCE = 20.0
+```
+
+Restored the old PPO settings, observations, torque controls, and dense reward formulas. Extra knee/speed/smoothing objectives are disabled by default. The finish condition and explicit terminal rewards remain adjustable.
+
+Start a fresh run using the variables:
+
+```bash
+python -m Training_run train --run Training_run/runs/restored_01
+```
+
+You can still override the episode count with `--episodes`.
+
+Existing runs retain their saved settings. **13 tests passed**, including a comparison against the old reward and dynamics, plus a short training check. No long training run is active.
+
+--------
+
+Prompt:
+
+how do I vire the video of it?
+
+Response:
+
+After training finishes, run:
+
+```bash
+python -m Training_run video --run Training_run/runs/restored_01
+```
+
+Then open the generated video:
+
+```bash
+open Training_run/runs/restored_01/best_run.mp4
+```
+
+Replace `restored_01` with your actual run folder name. This uses the best saved policy and selects the best episode from several evaluation trials.
+
+-----------
+
+Prompt:
+
+rework the config.py so that it idoesn't reference old vs new and the David Teying things
+
+Response:
+
+Updated `Training_run/config.py` with standalone descriptions and neutral mode names (`per_action`, `state_noise`).
+
+Removed references to old/new setups and `David_trying_stuff`. Training behavior and numeric settings are unchanged; both regression tests passed.
+
+---------
+
+Prompt:
+
+What is the current reward equation?
+
+Response:
+
+With the current `Training_run/config.py`, the **reward per action** is:
+
+\[
+\boxed{
+r =
+1.25v_x
++ 5e^{-((h-1.4)/0.15)^2}\,\mathbf{1}_{\text{not fallen}}
++ H
+- 0.2\sum_{i=1}^{17}u_i^2
+- \min\left(5\times10^{-7}\sum_j F_j^2,\;10\right)
+- 200\,\mathbf{1}_{\text{fall}}
++ 500\,\mathbf{1}_{\text{finish}}
+}
+\]
+
+The heading term is:
+
+\[
+H =
+0.5c_{\text{torso}}
++0.5c_{\text{pelvis}}
++0.25c_{\text{left foot}}
++0.25c_{\text{right foot}}
+\]
+
+| Symbol | Meaning |
+|---|---|
+| \(v_x\) | Whole-body center-of-mass forward velocity, in m/s |
+| \(h\) | Root height in meters—not head height |
+| \(u_i\) | Motor command, bounded between −0.4 and +0.4 |
+| \(F_j\) | Components of the external body forces and torques |
+| \(c_{\text{body}}\) | Horizontal forward alignment: +1 forward, 0 sideways, −1 backward |
+| \(\mathbf{1}\) | Equals 1 when the condition occurs, otherwise 0 |
+
+In practical terms:
+
+- **Forward motion:** +1.25 per m/s.
+- **Standing height:** up to +5, peaking at 1.4 meters. This term checks height, not torso tilt.
+- **Facing forward:** up to +1.5 when all four measured bodies face forward.
+- **Effort and contact:** subtract penalties.
+- **Fall:** −200 and terminate.
+- **Finish:** +500 and terminate after advancing 20 meters. A simultaneous fall takes precedence.
+
+These active rewards are **not multiplied by the action duration**. Timeout has no separate terminal bonus or penalty.
+
+**Currently disabled:** knee coordination, sideways-motion penalties, target-speed tracking, additional distance reward, and action smoothing—their weights are zero.
+
+This describes the current defaults. Previously saved runs use their own settings and reward snapshots.
+
+----------
+
+Prompt:
+
+There is so many varialbes, how would I figure out which to change?
+
+Response:
+
+**Start with the behavior you want to fix—not the full list of variables.** Most settings can stay unchanged while you test one hypothesis.
+
+For now, focus on these:
+
+| What you observe | Setting to investigate | What it controls |
+|---|---|---|
+| Falls quickly | `REWARD_UPRIGHT_WEIGHT` | Reward for maintaining standing height |
+| Lunges forward, then falls | `REWARD_FORWARD_VELOCITY_WEIGHT` | Incentive to move faster |
+| Faces backward or twists | `REWARD_TORSO_HEADING_WEIGHT`, `REWARD_PELVIS_HEADING_WEIGHT` | Incentive to face forward |
+| Moves sideways | `REWARD_SIDE_VELOCITY_COST` | Penalty for sideways velocity |
+| Survives but barely moves | `REWARD_FORWARD_VELOCITY_WEIGHT` | Incentive for forward movement |
+| One leg drags | `REWARD_KNEE_WEIGHT` | Encourages the alternating knee targets |
+
+These are hypotheses, not guaranteed fixes. For example, increasing the “upright” reward encourages the correct **height**, but doesn’t directly teach balance.
+
+**Use a small experiment instead of guessing repeatedly.**
+
+Suppose the humanoid lunges forward and falls. Test only the forward-speed weight:
+
+| Run | `REWARD_FORWARD_VELOCITY_WEIGHT` |
+|---|---:|
+| Baseline | 1.25 |
+| Experiment A | 0.75 |
+| Experiment B | 0.25 |
+
+Keep everything else—including the training seed—unchanged for this initial comparison. Use separate run folders.
+
+Compare:
+
+- **Finish rate:** how often it reaches 20 meters.
+- **Episode length:** how long it survives.
+- **Forward distance:** whether longer survival also produces useful movement.
+- **Video:** whether the motion looks like walking/running rather than falling forward.
+
+**Don’t compare total reward across different reward formulas.** Changing a weight changes the score itself.
+
+For the first round, leave these alone:
+
+- PPO hyperparameters.
+- Network sizes.
+- Physics timestep and frame skip.
+- Knee angles and gait frequency.
+- Fall penalty and finish bonus.
+
+That keeps the experiment interpretable. Knee shaping is especially worth postponing until the humanoid has some balance—it asks it to follow another objective while it is still learning to stay upright.
+
+**My suggested first question is: “Does rewarding forward speed less help it stay upright longer?”** Test the three weights above with equal interaction budgets; fixed episode counts can produce very different numbers of training steps. Then repeat the most promising comparison with several seeds before deciding it helped.
+
+-----------
+
+Prompt:
+
+Ok, I want to encourage knee movement (it currently just wiggles forward on legs), what are my options
+
+Response:
+
+You have several options. **The goal should be useful stepping—not simply more knee motion**, which could produce shaking or squatting.
+
+| Option | Encourages | Main limitation |
+|---|---|---|
+| **Alternating knee targets** | Left knee bends while right extends, then switches | A fixed rhythm may conflict with balance |
+| **Bend during swing** | Bend the knee when its foot is off the ground | Needs contact-aware reward code |
+| **Foot clearance and less slipping** | Lift and advance each foot instead of sliding | Can produce exaggerated lifting or hopping |
+| **Reference-motion imitation** | Follow an example running gait | Requires a suitable reference motion |
+
+**1. Try the existing alternating-knee reward first**
+
+It is already implemented but disabled:
+
+```python
+REWARD_KNEE_WEIGHT = 0.0
+```
+
+It asks both knees to alternate between these targets:
+
+```python
+REWARD_KNEE_STRAIGHT_DEGREES = -10.0
+REWARD_KNEE_BENT_DEGREES = -65.0
+ENV_GAIT_FREQUENCY_HZ = 1.4
+```
+
+More negative means more knee bend. The reward is reduced when either knee misses its target, and it is gated by forward motion and upright posture.
+
+There is an important scaling detail: **this component is still multiplied by `dt ≈ 0.015`**, whereas your core rewards are per action.
+
+| Knee weight | Maximum knee reward per action |
+|---:|---:|
+| 2 | 0.03 |
+| 10 | 0.15 |
+| 30 | 0.45 |
+
+Those maxima assume perfect tracking and fully satisfied movement/posture gates. Actual rewards can be much smaller.
+
+A reasonable first comparison is **weights 0, 10, and 30**, keeping the knee angles, frequency, and other settings fixed. These are experimental values, not established optimal settings.
+
+**Enabling this changes the observation size from 348 to 369**, because the policy receives the gait phase and additional state. Start a fresh run; existing 348-input checkpoints cannot directly continue with it.
+
+**2. Reward knee bending during actual swing**
+
+This is my preferred next implementation if the fixed rhythm fails.
+
+Instead of a clock dictating the motion:
+
+- When a foot leaves the ground and advances, encourage its knee to bend.
+- When that leg supports the body, allow it to extend.
+- Encourage alternating support between legs.
+
+This connects knee movement to stepping. We would need to avoid rewarding foot lifting alone, because the agent could learn to hop.
+
+**3. Address sliding directly**
+
+Your observation that it “wiggles forward” may indicate foot sliding rather than just insufficient knee bending.
+
+We could add:
+
+- A modest penalty for horizontal foot velocity **while the foot contacts the ground**.
+- A bounded reward for appropriate foot clearance during swing.
+- A reward for alternating forward foot placements.
+
+These target the unwanted behavior more directly, but require code changes and careful testing.
+
+**4. Use a reference gait**
+
+For stronger control over motion style, reward matching a walking/running reference. Methods such as DeepMimic combine motion imitation with task rewards, but this introduces demonstration data into the project. [DeepMimic paper](https://arxiv.org/abs/1804.02717)
+
+**I’d start with the existing knee-weight experiment.** Inspect both knees in the video and compare distance and falls—not just reward. If it bends more but still slides, the next experiment should target foot contact and slipping.
+
+-----------
+
+Prompt:
+
+I want to encourage the legs to go farther forward but obviously that is xsecondary to the guy staying up and moving forward...
+
+Response:
+
+Added a **small forward-reach reward**, secondary to staying upright and moving forward.
+
+It rewards a foot only when it:
+- Is off the ground and advancing relative to the pelvis.
+- Reaches ahead of the body.
+- Belongs to an upright, forward-moving humanoid.
+
+In `Training_run/config.py`:
+
+```python
+REWARD_FORWARD_REACH_WEIGHT = 0.5
+REWARD_FORWARD_REACH_METERS = 0.35
+```
+
+The total bonus is capped at **0.5 per action**, versus up to **5 for standing height**. Reaching beyond 35 cm earns nothing extra, and holding a leg out stops earning the bonus.
+
+This encourages forward swing; it doesn’t guarantee longer steps or better balance. All **15 tests passed**, but improved movement still needs training and evaluation.
+
+Start a comparison run:
+
+```bash
+python -m Training_run train --run Training_run/runs/forward_reach_01
+```
+
+-----------
+
+Prompt:
+
+Write a readme explaining how to use the Training_run
+
+Response:
+
+Updated `Training_run/README.md` with:
+
+- Environment setup and training commands
+- Editing `config.py`
+- Generating and opening videos
+- Rewards, episode rules, and PPO settings
+- Logs, checkpoints, and troubleshooting
+
+Verified the documented command-line options.
+
+----------
+

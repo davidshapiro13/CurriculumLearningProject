@@ -1,0 +1,3 @@
+# Generated experiment artifacts; source and default configuration stay tracked.
+runs/
+__pycache__/

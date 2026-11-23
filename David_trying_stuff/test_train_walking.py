@@ -79,7 +79,7 @@ class WalkingTests(unittest.TestCase):
         mujoco.mj_forward(self.env.model, self.env.data)
         _, _, terminated, truncated, info = self.env.step(np.zeros(self.env.model.nu))
         self.assertFalse(terminated or truncated)
-        self.assertEqual(info['upright_reward'], 0.0)
+        self.assertLess(info['upright_reward'], 1e-6)
 
     def test_action_limits_and_reset_seed(self):
         first, _ = self.env.reset(seed=42)

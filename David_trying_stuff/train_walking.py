@@ -91,7 +91,23 @@ class WalkingEnv(gym.Env):
         self._done = False
         return self._observation(), {"elapsed_steps": 0}
 
+
     def step(self, action):
+
+        def forward_alignment(body_name):
+            # Body orientation: columns are its local axes in world coordinates.
+            rotation = self.data.body(body_name).xmat.reshape(3, 3)
+
+            # Project the body's local +X direction onto the horizontal plane.
+            forward_xy = rotation[:2, 0]
+            length = np.linalg.norm(forward_xy)
+
+            if length < 1e-6:
+                return 0.0
+
+            # Alignment with world +X: +1 forward, 0 sideways, -1 backward.
+            return float(forward_xy[0] / length)
+        
         if self._done:
             raise RuntimeError("Call reset() before stepping a new episode")
         action = np.asarray(action, dtype=np.float64)
@@ -121,11 +137,25 @@ class WalkingEnv(gym.Env):
         # Standard Humanoid-style reward, while retaining the requested contact
         # termination instead of Gymnasium's torso-height termination.
         height = float(self.data.qpos[2])
-        upright_reward = 5.0 if not terminated and 1.0 < height < 2.0 else 0.0
-        effort_cost = 0.1 * float(np.sum(action ** 2))
+        height_reward = 5.0 * np.exp(-((height - 1.4) / 0.15) ** 2)
+        upright_reward = 0.0 if terminated else height_reward
+        effort_cost = 0.2 * float(np.sum(action ** 2))
+
+        pelvis_alignment = forward_alignment("pelvis")
+        torso_alignment = forward_alignment("torso")
+        left_foot_alignment = forward_alignment("left_foot")
+        right_foot_alignment = forward_alignment("right_foot")
+
+        heading_reward = (
+            0.5 * pelvis_alignment
+            + 0.5 * torso_alignment
+            + 0.25 * left_foot_alignment
+            + 0.25 * right_foot_alignment
+)
+
         mujoco.mj_rnePostConstraint(self.model, self.data)
         contact_cost = min(5e-7 * float(np.sum(self.data.cfrc_ext ** 2)), 10.0)
-        reward = 1.25 * forward_velocity + upright_reward - effort_cost - contact_cost
+        reward = 1.25 * forward_velocity + upright_reward + heading_reward - effort_cost - contact_cost
         self._done = terminated or truncated
         info = {
             "elapsed_steps": self.elapsed_steps,
